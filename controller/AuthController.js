@@ -57,7 +57,8 @@ const AuthController = {
                     res.clearCookie('refreshToken');
                     return res.status(403).json({isLogin: false })
                 } else {        
-                    const accessToken = jwt.sign({ username: data.fullname, id : data._id}, A_TOKEN_SECRET, { expiresIn: '10m' })
+                    // console.log(data);
+                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true
                     });
@@ -69,10 +70,16 @@ const AuthController = {
         }
     },
 
-    async removeToken (req,res) {
-        // xóa cookie
-        res.clearCookie('accessToken');
+    async logout (req,res) {
+        if (req.cookies.accessToken && req.cookies.refreshToken) {
+            // xóa cookie
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
 
+            return res.json({isLogin: false , msg: "Đăng xuất thành công"})
+        } else {
+        return res.json({success: false, msg: "Lỗi"})
+        }
     },
 
     async login (req, res) {
@@ -83,7 +90,7 @@ const AuthController = {
         // Check mật khẩu
         const passValid = await bcrypt.compare(req.body.password , user.password)
         if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
-        
+
         // Tạo accessToken 
         const accessToken = jwt.sign({ username: user.fullname, id : user._id}, A_TOKEN_SECRET, { expiresIn: '10m' })
         

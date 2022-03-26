@@ -7,6 +7,9 @@ router.post("/login", AuthController.login)
 // Route Đăng ký
 router.post("/signup", AuthController.signup)
 
+// Route Đăng xuất
+router.post("/logout", AuthController.logout)
+
 // Route access Token
 router.get("/accessToken", AuthController.accessToken)
 

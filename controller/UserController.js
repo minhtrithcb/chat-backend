@@ -1,10 +1,21 @@
-const bcrypt = require('bcrypt');
 const User = require("../models/user")
-const {A_TOKEN_SECRET} = require("../config/env.config")
-const jwt = require("jsonwebtoken")
 
 const UserController = {
    
+    async getUser (req, res) {
+       User.findOne({_id : req.params.userId})
+        .then((data) => {
+            
+            return res.json(data)
+
+        }).catch(err => {
+            return res.json({
+                success: false,
+                msg: err
+            })
+        })
+    },
+
     async getUsers (req, res) {
        User.find()
         .then((data) => {
