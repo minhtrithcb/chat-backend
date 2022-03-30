@@ -19,12 +19,12 @@ const socketIo = (app) => {
         users.push({uid, skid})
     }
 
-    function removeUser(skid) {
-        users = users.filter(u => u.skid !== skid)
+    function findUser(uid) {
+        return users.filter(u => u.uid === uid)
     }
 
-    function findUser(uid) {
-        return users.find(u => u.uid === uid)
+    function removeUser(skid) {
+        users = users.filter(u => u.skid !== skid)
     }
 
     io.on("connection", (socket) => {
@@ -36,17 +36,34 @@ const socketIo = (app) => {
             io.emit("getUser", users)
         })
 
+        // Event when user chose conversation
         socket.on("join room", (roomId) => {
             socket.join(roomId)
         })
 
+        // Event when user chose anoder conversation leave prev conversation
         socket.on("leave room", (roomId) => {
             socket.leave(roomId)
         })
 
+        // Event user send msg to room
         socket.on("send-msg", ({roomId , ...data}) => {
             // Sent to room Id
             io.to(roomId).emit("getMessage", data)
+        });
+
+        // Event friend online to display last message
+        socket.on("sendToFriendOnline", ({friendId , ...data}) => {
+            // Sent to friend Id
+            let friend = findUser(friendId)
+            let sender = findUser(data.sender)
+            if (friend[0]) {
+                // Sent back new msg to sender and reciver
+                io.to(friend[0].skid).to(sender[0].skid).emit("getSomeOneMessage", data)
+            } else if (sender[0]) {
+                // Sent back new msg for sender
+                io.to(sender[0].skid).emit("getSomeOneMessage", data)
+            }
         });
 
 
@@ -54,6 +71,7 @@ const socketIo = (app) => {
         socket.on("disconnect", () => {
             console.log("User disconnect");
             removeUser(socket.id)
+            // update users online again
             io.emit("getUser", users)
         })
     });

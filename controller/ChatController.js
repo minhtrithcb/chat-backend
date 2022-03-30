@@ -19,9 +19,11 @@ const ChatController = {
 
    async get (req,res) {
     try {
+        const offset = req.query.offset // 10
         const chat = await Chat.find({
             roomId : req.params.roomId
-        })
+        }).sort({createdAt: -1}).skip(offset).limit(10)
+        
         return res.json(chat)
     } catch (error) {
         return res.json(error)

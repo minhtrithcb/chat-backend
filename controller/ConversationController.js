@@ -1,3 +1,4 @@
+const Chat = require("../models/chat");
 const Conversation = require("../models/conversation")
 
 const ConversationController = {
@@ -25,7 +26,18 @@ const ConversationController = {
         } catch (error) {
             return res.json(error)
         }
-    }
+    },
+
+    async lastMsg (req, res) {
+        const roomId = req.params.roomId
+        // console.log(roomId);
+        try {
+            const chat = await Chat.findOne({roomId}).sort({createdAt: -1})
+            return res.json(chat)
+        } catch (error) {
+            return res.json(error)
+        }
+    } 
 
 }
 

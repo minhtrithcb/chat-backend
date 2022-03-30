@@ -43,9 +43,25 @@ const AuthController = {
                     return res.json({isLogin: true , accessToken: accessTK})
                 }
             })
+        } else if (req.cookies.refreshToken) {
+            const refreshTk = req.cookies.refreshToken
+
+            jwt.verify(refreshTk, R_TOKEN_SECRET, (err, data) => {
+                if (err) {
+                    res.clearCookie('refreshToken');
+                    return res.status(403).json({isLogin: false })
+                } else {        
+                    // console.log(data);
+                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
+                    res.cookie('accessToken', accessToken, {
+                        httpOnly: true
+                    });
+                    return res.json({isLogin: true , accessToken})
+                }
+            })
         } else {
             return res.json({isLogin: false })
-        }
+        } 
     },
 
     async refreshToken (req, res) {
