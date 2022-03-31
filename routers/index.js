@@ -2,6 +2,7 @@ const authMiddleware = require('../middleware/auth');
 const authRoute = require('./authRoute')
 const userRoute = require('./userRoute')
 const chatRoute = require('./chatRoute')
+const friendReqRoute = require('./friendReqRoute')
 const conversationRoute = require('./conversationRoute')
 
 function routerInit(app) {
@@ -13,6 +14,9 @@ function routerInit(app) {
      
      // router Liên quan room
      app.use("/api/conversation", conversationRoute);
+     
+     // router Liên quan room
+     app.use("/api/friendReq", friendReqRoute);
      
      // router Liên quan chat
      app.use("/api/chat", chatRoute);
