@@ -48,6 +48,7 @@ const UserController = {
             })
         }
     },
+    
 
     async getUsers (req, res) {
        User.find()
@@ -62,6 +63,52 @@ const UserController = {
                 msg: err
             })
         })
+    },
+
+
+    async unFriend (req, res) {
+        const friendId = req.body.friendId
+        const currentUserId = req.body.currentUserId
+
+        try {
+            const user = User.findOneAndUpdate({
+                _id : currentUserId
+            },{
+                $pull: {
+                    friend: friendId
+                },
+            })
+
+            const friend = User.findOneAndUpdate({
+                _id : friendId
+            },{
+                $pull: {
+                    friend: currentUserId
+                },
+            })
+
+            Promise.all([user, friend])
+                .then(() => {
+                    return res.json({msg: 'unfriend success'})
+                })
+         } catch (error) {
+             return res.json({
+                 success: false,
+                 msg: error
+             })
+        }
+    },
+
+    async getFriendUser (req, res) {
+        try {
+           const user = await User.findOne({_id : req.params.id}).populate('friend')
+           return res.json(user.friend)
+        } catch (error) {
+            return res.json({
+                success: false,
+                msg: error
+            })
+       }
     },
 
 }

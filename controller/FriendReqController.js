@@ -2,7 +2,7 @@ const FriendReq = require("../models/friendReq");
 const User = require("../models/user");
 
 const FriendReqController = {
-
+    // User send FR > create
     async sendFriendReq(req, res) {    
         const newFriendReq = new FriendReq({
             sender: req.body.sender,
@@ -28,40 +28,38 @@ const FriendReqController = {
         }
     },
 
-    async acceptFriendReq(req, res) {    
-        try {
-            const friendReq = await FriendReq.findOne({
-                id: req.body.id
-            })
-            /// add sender -> currUser
-            const update = User.findOneAndUpdate({
-                _id: req.body.currentUserId
-            },{
-                $push: {friend: friendReq.sender}
-            })
-
-            const updateFriend = User.findOneAndUpdate({
-                _id: friendReq.sender
-            },{
-                $push: {friend: req.body.currentUserId}
-            })
-            const remove = FriendReq.findOneAndRemove({ id : req.body.id})
-
-            Promise.all([update,updateFriend, remove])
-            .then(() => {
-                return res.json({success: true})
-            })
-        } catch (error) {
-            return res.json(error)
-        }
-    },
-
     async getAcceptFriendReq(req, res) {    
         try {
             const result = await FriendReq.find({
                 reciver: req.params.reciver
             }).populate('sender')
             return res.json(result)
+        } catch (error) {
+            return res.json(error)
+        }
+    },
+
+    async acceptFriendReq(req, res) {    
+        try {
+            /// add sender -> currUser
+            const updateCurrUser = User.findOneAndUpdate({
+                _id: req.body.currentUserId
+            },{
+                $push: {friend: req.body.sender}
+            })
+
+            const updateFriendUser = User.findOneAndUpdate({
+                _id: req.body.sender
+            },{
+                $push: {friend: req.body.currentUserId}
+            })
+
+            const deleteFr = FriendReq.findOneAndRemove({ _id : req.body.id})
+
+            Promise.all([updateCurrUser, updateFriendUser, deleteFr])
+            .then(() => {
+                return res.json({success: true})
+            })
         } catch (error) {
             return res.json(error)
         }

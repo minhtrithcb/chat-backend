@@ -66,6 +66,13 @@ const socketIo = (app) => {
             }
         });
 
+        socket.on("sendAddFriend", ({reciverId, ...data}) => {
+            let reciver = findUser(reciverId)
+            if (reciver[0]) {
+                io.to(reciver[0].skid).emit("getAddFriend", data)
+            }
+        })
+
 
         // User disconnect & remove this user online
         socket.on("disconnect", () => {

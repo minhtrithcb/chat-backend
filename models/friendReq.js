@@ -6,10 +6,6 @@ const friendReqSchema = new Schema({
     }, 
     reciver : {
         type: Schema.Types.ObjectId, ref: 'users' 
-    },
-    status: {
-        type : Boolean,
-        default: false
     }
 },{
     versionKey: false,
