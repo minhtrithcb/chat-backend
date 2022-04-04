@@ -1,11 +1,11 @@
 const {Schema, model} = require("mongoose");
 
 const friendReqSchema = new Schema({
-    sender: { 
-        type: Schema.Types.ObjectId, ref: 'users' 
+    sender: {
+        type: Object
     }, 
     reciver : {
-        type: Schema.Types.ObjectId, ref: 'users' 
+        type: Object
     }
 },{
     versionKey: false,

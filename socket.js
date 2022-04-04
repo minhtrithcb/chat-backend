@@ -36,6 +36,10 @@ const socketIo = (app) => {
             io.emit("getUser", users)
         })
 
+        socket.on('join conversation', () => {
+            io.emit("getUser", users)
+        })
+
         // Event when user chose conversation
         socket.on("join room", (roomId) => {
             socket.join(roomId)
@@ -57,7 +61,7 @@ const socketIo = (app) => {
             // Sent to friend Id
             let friend = findUser(friendId)
             let sender = findUser(data.sender)
-            if (friend[0]) {
+            if (friend[0] && sender[0]) {
                 // Sent back new msg to sender and reciver
                 io.to(friend[0].skid).to(sender[0].skid).emit("getSomeOneMessage", data)
             } else if (sender[0]) {
@@ -72,7 +76,6 @@ const socketIo = (app) => {
                 io.to(reciver[0].skid).emit("getAddFriend", data)
             }
         })
-
 
         // User disconnect & remove this user online
         socket.on("disconnect", () => {

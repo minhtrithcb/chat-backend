@@ -2,13 +2,12 @@ const FriendReq = require("../models/friendReq");
 const User = require("../models/user");
 
 const FriendReqController = {
-    // User send FR > create
-    async sendFriendReq(req, res) {    
+
+    async createFriendReqs(req,res) {
         const newFriendReq = new FriendReq({
             sender: req.body.sender,
             reciver: req.body.reciver
         })
-
         try {
             const saved = await newFriendReq.save();
             return res.json(saved)
@@ -20,8 +19,8 @@ const FriendReqController = {
     async getFriendReq(req, res) {    
         try {
             const result = await FriendReq.find({
-                sender: req.params.sender
-            }).populate('reciver')
+                'sender._id' : {$in :[req.params.sender]}
+            })
             return res.json(result)
         } catch (error) {
             return res.json(error)
@@ -31,8 +30,8 @@ const FriendReqController = {
     async getAcceptFriendReq(req, res) {    
         try {
             const result = await FriendReq.find({
-                reciver: req.params.reciver
-            }).populate('sender')
+                'reciver._id' : {$in :[req.params.reciver]}
+            })
             return res.json(result)
         } catch (error) {
             return res.json(error)

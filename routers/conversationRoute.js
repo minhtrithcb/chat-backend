@@ -4,6 +4,8 @@ const router = require("express").Router();
 // Route Post room
 router.post("/", ConversationController.post)
 
+router.post("/delete", ConversationController.delete)
+
 // Route Get last message by roomId
 router.get("/lastMsg/:roomId", ConversationController.lastMsg)
 

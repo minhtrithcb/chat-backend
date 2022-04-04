@@ -2,8 +2,23 @@ const Chat = require("../models/chat");
 const Conversation = require("../models/conversation")
 
 const ConversationController = {
-   
-    async post (req, res ) {
+
+    async delete (req, res) {
+        const currentUserId = req.body.currentUserId
+        const friendId = req.body.friendId
+
+        try {
+            let conver = await Conversation.findOneAndDelete({
+                members : { $all : [friendId, currentUserId]}
+            })
+            await Chat.deleteMany({roomId: conver._id})
+            return res.json({msg: "Delete success"})
+        } catch (error) {
+            return res.json(error)
+        }
+    },
+
+    async post (req, res) {
         const newConversation = new Conversation({
             members: [req.body.senderId, req.body.receiverId],
             owner: req.body.senderId

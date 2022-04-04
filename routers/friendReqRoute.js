@@ -11,7 +11,7 @@ router.get("/accept-friend-request/:reciver", FriendReqController.getAcceptFrien
 router.post("/accept-friend-request", FriendReqController.acceptFriendReq)
 
 // Route post
-router.post("/send-friend-request", FriendReqController.sendFriendReq)
+router.post("/create-friend-request", FriendReqController.createFriendReqs)
 
 // Route get all user search fullname
 router.post("/unsend-friend-request", FriendReqController.unSendFriendReq)

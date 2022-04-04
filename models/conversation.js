@@ -7,9 +7,8 @@ const conversationSchema = new Schema({
     name: {
         type: String, 
     },
-    owner: {
-        type: String, 
-        required: true,
+    owner: { 
+        type: Schema.Types.ObjectId, ref: 'users' 
     },
     private: {
         type: Boolean,
