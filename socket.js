@@ -14,15 +14,18 @@ const socketIo = (app) => {
 
     let users = []
 
+    // Check in array add in not exist
     function addUser(uid , skid) {
         !users.some(u => u.uid === uid) &&
         users.push({uid, skid})
     }
 
+    // Find In array user
     function findUser(uid) {
         return users.filter(u => u.uid === uid)
     }
 
+    // Remove user by socket id
     function removeUser(skid) {
         users = users.filter(u => u.skid !== skid)
     }
@@ -36,6 +39,7 @@ const socketIo = (app) => {
             io.emit("getUser", users)
         })
 
+        // Every time user go in on conversation page then get list user for client
         socket.on('join conversation', () => {
             io.emit("getUser", users)
         })

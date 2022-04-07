@@ -3,6 +3,7 @@ const User = require("../models/user")
 
 const UserController = {
    
+    // Find One user
     async getUser (req, res) {
        User.findOne({_id : req.params.userId})
         .then((data) => {
@@ -17,6 +18,7 @@ const UserController = {
         })
     },
 
+    // Find all user by fullname or email
     async searchUser(req, res) {    
         try {
             const currentUserId = req.body.currentUser // id
@@ -34,7 +36,8 @@ const UserController = {
                 _id: currentUserId,
             })
 
-            const friendReq = FriendReq.find({sender: currentUserId})
+            const friendReq = FriendReq.find({'sender._id': currentUserId})
+
 
             Promise.all([result, currentUser, friendReq])
             .then(data => {
@@ -49,7 +52,7 @@ const UserController = {
         }
     },
     
-
+    // Get all users
     async getUsers (req, res) {
        User.find()
         .then((data) => {
@@ -65,7 +68,7 @@ const UserController = {
         })
     },
 
-
+    // Currnet User unfriend => update friendlist bot friend and currnet user 
     async unFriend (req, res) {
         const friendId = req.body.friendId
         const currentUserId = req.body.currentUserId
@@ -99,6 +102,7 @@ const UserController = {
         }
     },
 
+    // Get FriendList by currnent user
     async getFriendUser (req, res) {
         try {
            const user = await User.findOne({_id : req.params.id}).populate('friend')

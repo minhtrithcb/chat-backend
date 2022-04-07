@@ -1,19 +1,19 @@
 const FriendReqController = require("../controller/FriendReqController");
 const router = require("express").Router();
 
-// Route post
+// Route get friend request by sender
 router.get("/friend-request/:sender", FriendReqController.getFriendReq)
 
-// Route post
+// Route get accept friend request by reciver
 router.get("/accept-friend-request/:reciver", FriendReqController.getAcceptFriendReq)
 
-// Route post
+// Route post reciver accept friend request
 router.post("/accept-friend-request", FriendReqController.acceptFriendReq)
 
-// Route post
+// Route post create friend request
 router.post("/create-friend-request", FriendReqController.createFriendReqs)
 
-// Route get all user search fullname
+// Route post unsend friend request
 router.post("/unsend-friend-request", FriendReqController.unSendFriendReq)
 
 

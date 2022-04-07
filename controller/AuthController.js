@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 const AuthController = {
    
+    // Post Sign up => email Check if exist & hash pass 
     async signup (req, res) {
 
         // Check email tồn tại
@@ -31,10 +32,12 @@ const AuthController = {
         })
     },
 
+    // Get new accessToken 
     async accessToken (req, res) {
+        // If user have accessToken 
         if (req.cookies.accessToken) {
             let accessTK  = req.cookies.accessToken
-            // Check Token
+            // Check Token if(expire or strangeCode) ? delete accestTK : sent back nothing 
             jwt.verify(accessTK, A_TOKEN_SECRET, (err, data) => {
                 if (err) {
                     res.clearCookie('accessToken');
@@ -43,15 +46,16 @@ const AuthController = {
                     return res.json({isLogin: true , accessToken: accessTK})
                 }
             })
+        // If user dont have accessToken but have refreshTK 
         } else if (req.cookies.refreshToken) {
             const refreshTk = req.cookies.refreshToken
-
+            // Check Token if(expire or strangeCode) ? delete refreshTk send Login fail: create new accestTk
             jwt.verify(refreshTk, R_TOKEN_SECRET, (err, data) => {
                 if (err) {
                     res.clearCookie('refreshToken');
                     return res.status(403).json({isLogin: false })
                 } else {        
-                    // console.log(data);
+                    // Create new accestTk & send back
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true
@@ -64,16 +68,18 @@ const AuthController = {
         } 
     },
 
+    // Get new refreshToken 
     async refreshToken (req, res) {
+        // If user have refreshTK 
         if (req.cookies.refreshToken) {
             const refreshTk = req.cookies.refreshToken
-            
+            // Check Token if(expire or strangeCode) ? delete refreshTk send Login fail: create new accestTk
             jwt.verify(refreshTk, R_TOKEN_SECRET, (err, data) => {
                 if (err) {
                     res.clearCookie('refreshToken');
                     return res.status(403).json({isLogin: false })
                 } else {        
-                    // console.log(data);
+                    // Create new accestTk & send back
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true
@@ -86,9 +92,10 @@ const AuthController = {
         }
     },
 
+    // Post logout just delete two cookie refreshToken & accessToken
     async logout (req,res) {
         if (req.cookies.accessToken && req.cookies.refreshToken) {
-            // xóa cookie
+            // delete cookie
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
 
@@ -98,31 +105,33 @@ const AuthController = {
         }
     },
 
+    // Post user Login 
     async login (req, res) {
         let user = await User.findOne({ email: req.body.email })
         .select("_id fullname password")
-        // Check accout tồn tại
+        // Check account exist
         if (!user) return res.json({success: false, msg: "Không tìm thấy tài khoản này"})
-        // Check mật khẩu
+        // Check password
         const passValid = await bcrypt.compare(req.body.password , user.password)
         if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
 
-        // Tạo accessToken 
+        // Create accessToken 
         const accessToken = jwt.sign({ username: user.fullname, id : user._id}, A_TOKEN_SECRET, { expiresIn: '10m' })
         
-        // Tạo accessToken 
+        // Create accessToken 
         const refreshToken = jwt.sign({ username: user.fullname, id : user._id}, R_TOKEN_SECRET, { expiresIn: '1d' })
         
-        // Tạo cookies
+        // Create cookies accessToken
         res.cookie('accessToken', accessToken, {
             httpOnly: true
         });
 
+        // Create cookie refreshToken expiresIn One day
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 
         });
-        
+        // Sent back to user
         return res.json({success: true, isLogin: true , accessToken, msg: "Đăng nhập thành công"})
     }
 }

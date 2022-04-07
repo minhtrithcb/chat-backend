@@ -1,7 +1,8 @@
 const Chat = require("../models/chat")
 
 const ChatController = {
-   
+    
+    // Post create new chat 
     async post (req,res) {
         const newChat = new Chat({
             roomId: req.body.roomId,
@@ -16,19 +17,18 @@ const ChatController = {
             return res.json(error)
         }
    },
-
-   async get (req,res) {
-    try {
-        const chat = await Chat.find({
-            roomId : req.params.roomId
-        }).sort({createdAt: -1})
-        
-        return res.json(chat)
-    } catch (error) {
-        return res.json(error)
+    // Get all chat by roomId (ConvertationId) Then sort des
+    async get (req,res) {
+        try {
+            const chat = await Chat.find({
+                roomId : req.params.roomId
+            }).sort({createdAt: -1})
+            
+            return res.json(chat)
+        } catch (error) {
+            return res.json(error)
+        }
     }
-   }
-
 }
 
 module.exports = ChatController

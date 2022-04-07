@@ -3,6 +3,7 @@ const Conversation = require("../models/conversation")
 
 const ConversationController = {
 
+    // Post delete a Conversation => then delete all chat of this conversation
     async delete (req, res) {
         const currentUserId = req.body.currentUserId
         const friendId = req.body.friendId
@@ -18,6 +19,7 @@ const ConversationController = {
         }
     },
 
+    // Post create new Conversation 
     async post (req, res) {
         const newConversation = new Conversation({
             members: [req.body.senderId, req.body.receiverId],
@@ -31,7 +33,8 @@ const ConversationController = {
             return res.json(error)
         }
     },
-
+    
+    // Get Conversation by userId 
     async get (req, res) {
         try {
             const conversation = await Conversation.find({
@@ -43,6 +46,7 @@ const ConversationController = {
         }
     },
 
+    // Get last message by roomId
     async lastMsg (req, res) {
         const roomId = req.params.roomId
         // console.log(roomId);

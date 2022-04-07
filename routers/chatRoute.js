@@ -1,10 +1,10 @@
 const ChatController = require("../controller/ChatController");
 const router = require("express").Router();
 
-// Route Chat
+// Route Post create new chat
 router.post("/", ChatController.post)
 
-// Route Get all chat by room
+// Route Get all chat by roomId (ConvertationId)
 router.get("/:roomId", ChatController.get)
 
 

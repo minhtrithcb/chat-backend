@@ -6,19 +6,19 @@ const friendReqRoute = require('./friendReqRoute')
 const conversationRoute = require('./conversationRoute')
 
 function routerInit(app) {
-     // router Liên quan bảo mật
+     // router for Auth
      app.use("/api/auth", authRoute);
      
-     // router Liên quan user
+     // router for user
      app.use("/api/user", userRoute);
      
-     // router Liên quan room
+     // router for conversation (room)
      app.use("/api/conversation", conversationRoute);
      
-     // router Liên quan room
+     // router for Friend Request
      app.use("/api/friendReq", friendReqRoute);
      
-     // router Liên quan chat
+     // router For chat 
      app.use("/api/chat", chatRoute);
 }
 

@@ -3,6 +3,7 @@ const User = require("../models/user");
 
 const FriendReqController = {
 
+    // post create friend request
     async createFriendReqs(req,res) {
         const newFriendReq = new FriendReq({
             sender: req.body.sender,
@@ -16,6 +17,7 @@ const FriendReqController = {
         }
     },
 
+    // get friend request by sender
     async getFriendReq(req, res) {    
         try {
             const result = await FriendReq.find({
@@ -27,6 +29,7 @@ const FriendReqController = {
         }
     },
 
+    // get accept friend request by reciver
     async getAcceptFriendReq(req, res) {    
         try {
             const result = await FriendReq.find({
@@ -38,6 +41,7 @@ const FriendReqController = {
         }
     },
 
+    // post reciver accept friend request => update friendList sender & reciver then delete Friend Request
     async acceptFriendReq(req, res) {    
         try {
             /// add sender -> currUser
@@ -64,6 +68,7 @@ const FriendReqController = {
         }
     },
 
+    // post unsend friend request => delete Friend request
     async unSendFriendReq(req, res) {    
         const reqId = req.body.reqId
         try {
