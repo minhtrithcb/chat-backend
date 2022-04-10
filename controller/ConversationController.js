@@ -34,12 +34,13 @@ const ConversationController = {
         }
     },
     
-    // Get Conversation by userId 
+    // Get all Conversation by userId    
     async get (req, res) {
         try {
             const conversation = await Conversation.find({
                 members : { $in : [req.params.userId]}
             })
+            .populate('members')
             return res.json(conversation)
         } catch (error) {
             return res.json(error)
@@ -48,10 +49,11 @@ const ConversationController = {
 
     // Get last message by roomId
     async lastMsg (req, res) {
-        const roomId = req.params.roomId
-        // console.log(roomId);
         try {
-            const chat = await Chat.findOne({roomId}).sort({createdAt: -1})
+            const chat = await Chat.findOne({
+                roomId: req.params.roomId
+            })
+            .sort({'_id': -1}).limit(1)
             return res.json(chat)
         } catch (error) {
             return res.json(error)

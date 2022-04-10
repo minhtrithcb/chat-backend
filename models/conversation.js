@@ -1,15 +1,16 @@
 const {Schema, model} = require("mongoose");
 
 const conversationSchema = new Schema({
-    members: { 
-        type: Array
-    },
+    members: [{ 
+        type: Schema.Types.ObjectId, ref: 'users' 
+    }],
     name: {
         type: String, 
     },
     owner: { 
         type: Schema.Types.ObjectId, ref: 'users' 
     },
+    lastMsg: Object,
     private: {
         type: Boolean,
         default: true

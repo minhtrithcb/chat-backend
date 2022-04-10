@@ -10,16 +10,16 @@ function routerInit(app) {
      app.use("/api/auth", authRoute);
      
      // router for user
-     app.use("/api/user", userRoute);
+     app.use("/api/user", authMiddleware, userRoute);
      
      // router for conversation (room)
-     app.use("/api/conversation", conversationRoute);
+     app.use("/api/conversation", authMiddleware, conversationRoute);
      
      // router for Friend Request
-     app.use("/api/friendReq", friendReqRoute);
+     app.use("/api/friendReq", authMiddleware, friendReqRoute);
      
      // router For chat 
-     app.use("/api/chat", chatRoute);
+     app.use("/api/chat", authMiddleware, chatRoute);
 }
 
 module.exports = routerInit

@@ -32,7 +32,7 @@ const AuthController = {
         })
     },
 
-    // Get new accessToken 
+    // Get new accessToken (When user frist load web used old accessTk or get New accessTk by RefreshTK
     async accessToken (req, res) {
         // If user have accessToken 
         if (req.cookies.accessToken) {
@@ -46,7 +46,7 @@ const AuthController = {
                     return res.json({isLogin: true , accessToken: accessTK})
                 }
             })
-        // If user dont have accessToken but have refreshTK 
+        // 
         } else if (req.cookies.refreshToken) {
             const refreshTk = req.cookies.refreshToken
             // Check Token if(expire or strangeCode) ? delete refreshTk send Login fail: create new accestTk
@@ -63,12 +63,13 @@ const AuthController = {
                     return res.json({isLogin: true , accessToken})
                 }
             })
-        } else {
+        }
+        else {
             return res.json({isLogin: false })
         } 
     },
 
-    // Get new refreshToken 
+    // Get new accestTk by refreshToken 
     async refreshToken (req, res) {
         // If user have refreshTK 
         if (req.cookies.refreshToken) {
@@ -101,7 +102,7 @@ const AuthController = {
 
             return res.json({isLogin: false , msg: "Đăng xuất thành công"})
         } else {
-        return res.json({success: false, msg: "Lỗi"})
+            return res.json({success: false, msg: "Lỗi"})
         }
     },
 

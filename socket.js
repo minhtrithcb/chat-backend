@@ -60,6 +60,7 @@ const socketIo = (app) => {
             io.to(roomId).emit("getMessage", data)
         });
 
+
         // Event friend online to display last message
         socket.on("sendToFriendOnline", ({friendId , ...data}) => {
             // Sent to friend Id
