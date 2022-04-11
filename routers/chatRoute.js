@@ -5,7 +5,7 @@ const router = require("express").Router();
 router.post("/", ChatController.post)
 
 // 
-router.post("/reaction", ChatController.patchReacts)
+router.post("/reaction", ChatController.addReacts)
 
 // Route Get all chat by roomId (ConvertationId)
 router.get("/:roomId", ChatController.get)

@@ -11,9 +11,9 @@ const chatsSchema = new Schema({
     },
     reacts: [
         {
-            user: {
+            user: [{
                 type: Object
-            },
+            }],
             type: {
                 type: String
             }

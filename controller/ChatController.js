@@ -24,33 +24,19 @@ const ChatController = {
         }
    },
     // Patch to create reaction 
-    async patchReacts (req,res) {
+    async addReacts (req,res) {
         try {
-            // Find and pull if user already reaction same type ex:{uid: 1, type: "like"} same {uid: 1, type: "like"}
-            const found = await Chat.findOneAndUpdate({
+            // Find The Chat have reaction ex: like, wow, ...
+            let found = await Chat.findOne({
                 _id: req.body.chatId,
-                $and: [
-                    {
-                        'reacts.user.id':  req.body.user.id
-                    },
-                    {
-                        'reacts.type':  req.body.type
-                    },
-                ]
-            },{
-                $pull: {
-                    reacts: {
-                        'user.id' :req.body.user.id,
-                        type :req.body.type
-                    }
-                }
-            },{new: true})
+                'reacts.type': req.body.type  
+            })
 
-
-            // If not found mean user post anoder type of reactin ex: {uid: 1, type: "haha"}
+            // If not Found the reaction
             if (found === null) {
-               let found = await Chat.findOneAndUpdate({
-                    _id: req.body.chatId,
+                    // Create type of reaction then First push
+                    let result = await Chat.findOneAndUpdate({
+                        _id: req.body.chatId,
                     },{
                         $push: {
                             reacts: {
@@ -59,12 +45,49 @@ const ChatController = {
                             }
                         },
                 },{new: true})
+                return res.json({msg: "patch success first push", result})
+            // If Found the reaction 
+            } else {
+                    // Find that reaction & user into it
+                  
+                    const userReaction = await Chat.findOne({
+                        _id: req.body.chatId,
+                        'reacts':  {
+                            $elemMatch: { 
+                                type :req.body.type ,
+                                'user.id':req.body.user.id ,
+                            }
+                        }
+                    })
 
-                return res.json({msg: "patch success push", found})
-            } 
-
-            return res.json({msg: "patch success pull", found})
-
+                    // pull user reaction if user liked already
+                    if (userReaction !== null) {
+                        const result = await Chat.findOneAndUpdate({
+                                _id: req.body.chatId,
+                                'reacts.type':  req.body.type,
+                                // 'reacts.user.id':  req.body.user.id
+                            },{
+                                $pull: {
+                                    'reacts.$.user' : { 
+                                        id: req.body.user.id
+                                    },
+                                }
+                            },{new: true})
+                        return res.json({msg: "patch success pull", result})
+                    // Push user reaction
+                    } else {
+                        let result = await Chat.findOneAndUpdate({
+                            _id: req.body.chatId,
+                            'reacts.type': req.body.type  
+                            },{
+                                $push: {
+                                    'reacts.$.user' : req.body.user
+                                },
+                        },{new: true})
+    
+                        return res.json({msg: "patch success push into user", result})
+                    }
+            }
         } catch (error) {
             return res.json(error)
         }
