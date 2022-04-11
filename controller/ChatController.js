@@ -27,7 +27,7 @@ const ChatController = {
     async patchReacts (req,res) {
         try {
             // Find and pull if user already reaction same type ex:{uid: 1, type: "like"} same {uid: 1, type: "like"}
-            const found = await Chat.findOne({
+            const found = await Chat.findOneAndUpdate({
                 _id: req.body.chatId,
                 $and: [
                     {
@@ -37,17 +37,15 @@ const ChatController = {
                         'reacts.type':  req.body.type
                     },
                 ]
-            })
+            },{
+                $pull: {
+                    reacts: {
+                        'user.id' :req.body.user.id,
+                        type :req.body.type
+                    }
+                }
+            },{new: true})
 
-            // return res.json({found})
-            // },{
-            //     $pull: {
-            //         reacts: {
-            //             user :req.body.user,
-            //             type :req.body.type
-            //         }
-            //     }
-            // },{new: true})
 
             // If not found mean user post anoder type of reactin ex: {uid: 1, type: "haha"}
             if (found === null) {
@@ -63,30 +61,9 @@ const ChatController = {
                 },{new: true})
 
                 return res.json({msg: "patch success push", found})
-            } else {
-                const found = await Chat.findOneAndUpdate({
-                    _id: req.body.chatId,
-                    $and: [
-                        {
-                            'reacts.user.id':  req.body.user.id
-                        },
-                        {
-                            'reacts.type':  req.body.type
-                        },
-                    ]
-                },{
-                    $pull: {
-                        reacts: {
-                            // user :req.body.user,
-                            type :req.body.type
-                        }
-                    }
-                },{new: true})
+            } 
 
-                return res.json({msg: "patch success pull", found})
-            }
-
-
+            return res.json({msg: "patch success pull", found})
 
         } catch (error) {
             return res.json(error)
@@ -98,6 +75,7 @@ const ChatController = {
             const chat = await Chat.find({
                 roomId : req.params.roomId
             }).sort({createdAt: -1})
+
             
             return res.json(chat)
         } catch (error) {
