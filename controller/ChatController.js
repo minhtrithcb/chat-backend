@@ -23,6 +23,20 @@ const ChatController = {
             return res.json(error)
         }
    },
+    async patch (req,res) {
+        try {
+            let result = await Chat.findOneAndUpdate({
+                _id: req.body.chatId,
+                sender: req.body.sender
+            },{
+                text: req.body.text
+            }, {new: true})
+            
+            return res.json(result)
+        } catch (error) {
+            return res.json(error)
+        }
+   },
     // Patch to create reaction 
     async addReacts (req,res) {
         try {

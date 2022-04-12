@@ -60,6 +60,18 @@ const socketIo = (app) => {
             io.to(roomId).emit("getMessage", data)
         });
 
+        // Event user edit msg to room
+        socket.on("send-edit", ({roomId , ...data}) => {
+            // Sent to room Id
+            io.to(roomId).emit("getEditMessage", data)
+        });
+
+        // Event user send reactionin room
+        socket.on("send-reaction", ({roomId , ...data}) => {
+            // Sent to room Id
+            io.to(roomId).emit("getReaction", data)
+        });
+
 
         // Event friend online to display last message
         socket.on("sendToFriendOnline", ({friendId , ...data}) => {
@@ -75,6 +87,7 @@ const socketIo = (app) => {
             }
         });
 
+        // Event Add friend online 
         socket.on("sendAddFriend", ({reciverId, ...data}) => {
             let reciver = findUser(reciverId)
             if (reciver[0]) {
