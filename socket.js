@@ -60,18 +60,38 @@ const socketIo = (app) => {
             io.to(roomId).emit("getMessage", data)
         });
 
-        // Event user edit msg to room
-        socket.on("send-edit", ({roomId , ...data}) => {
+        // Event user send recall msg to room
+        socket.on("sendChangeChat", ({roomId , ...data}) => {
             // Sent to room Id
-            io.to(roomId).emit("getEditMessage", data)
+            io.to(roomId).emit("getChangeChat", data)
         });
 
-        // Event user send reactionin room
-        socket.on("send-reaction", ({roomId , ...data}) => {
-            // Sent to room Id
-            io.to(roomId).emit("getReaction", data)
+        // Event Stop pending chat
+        socket.on("stop-pendingChat", ({roomId, reciverId}) => {
+            let reciver = findUser(reciverId)
+            if (reciver[0]) {
+                io.to(roomId).to(reciver[0].skid).emit("stopPendingByFriend", true)
+            } else {
+                io.to(roomId).emit("stopPendingByFriend", true)
+            }
         });
 
+        // Event pending chat 
+        socket.on("send-PendingChat", ({roomId, reciverId }) => {
+            // Sent to friend Id
+            let reciver = findUser(reciverId)
+
+            if (reciver[0]) {
+                // Sent back new msg to reciver and room
+                io.to(roomId).to(reciver[0].skid).emit("getPendingByFriend", {
+                    roomId, 
+                    reciverId 
+                })
+            } else {
+                // Sent on room
+                io.to(roomId).emit("getPendingByFriend", true)
+            }
+        });
 
         // Event friend online to display last message
         socket.on("sendToFriendOnline", ({friendId , ...data}) => {
@@ -84,6 +104,20 @@ const socketIo = (app) => {
             } else if (sender[0]) {
                 // Sent back new msg for sender
                 io.to(sender[0].skid).emit("getSomeOneMessage", data)
+            }
+        });
+
+        // Event friend online to display last activity message (edit or recall)
+        socket.on("sendLastActivity", ({friendId , ...data}) => {
+            // Sent to friend Id
+            let friend = findUser(friendId)
+            let sender = findUser(data.result.sender)
+            if (friend[0] && sender[0]) {
+                // Sent back new msg to sender and reciver
+                io.to(friend[0].skid).to(sender[0].skid).emit("getLastActivity", data)
+            } else if (sender[0]) {
+                // Sent back new msg for sender
+                io.to(sender[0].skid).emit("getLastActivity", data)
             }
         });
 

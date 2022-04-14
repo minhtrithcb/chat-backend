@@ -29,10 +29,55 @@ const ChatController = {
                 _id: req.body.chatId,
                 sender: req.body.sender
             },{
-                text: req.body.text
+                text: req.body.text,
+                isEdit: true
             }, {new: true})
+
+            let room = await Conversation.findOneAndUpdate({
+                _id: req.body.roomId,
+                'lastMsg._id': result._id
+            }, {
+                lastMsg: result
+            })
             
-            return res.json(result)
+            return res.json({result, room})
+        } catch (error) {
+            return res.json(error)
+        }
+   },
+    async reply (req,res) {
+        const newChat = new Chat({
+            roomId: req.body.roomId,
+            sender: req.body.sender,
+            text: req.body.text,
+            replyMsg: req.body.replyMsg
+        })
+
+        try {
+            const saved = await newChat.save();
+            return res.json(saved)
+        } catch (error) {
+            return res.json(error)
+        }
+   },
+    async reCall (req,res) {
+        try {
+            let result = await Chat.findOneAndUpdate({
+                _id: req.body.chatId,
+                sender: req.body.sender
+            },{
+                reCall: true,
+                text: "Tin nhắn đã bị thu hồi"
+            }, {new: true})
+
+            let room = await Conversation.findOneAndUpdate({
+                _id: req.body.roomId,
+                'lastMsg._id': result._id
+            }, {
+                lastMsg: result
+            })
+            
+            return res.json({result, room})
         } catch (error) {
             return res.json(error)
         }

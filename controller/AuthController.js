@@ -41,7 +41,7 @@ const AuthController = {
             jwt.verify(accessTK, A_TOKEN_SECRET, (err, data) => {
                 if (err) {
                     res.clearCookie('accessToken');
-                    return res.status(401).json({isLogin: false })
+                    return res.status(401).json({isLogin: false})
                 } else {
                     return res.json({isLogin: true , accessToken: accessTK})
                 }

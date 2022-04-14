@@ -9,6 +9,11 @@ const chatsSchema = new Schema({
         type: String, 
         required: true,
     },
+    reCall : {
+        type: Boolean,
+        default: false
+    },
+    replyMsg: Object,
     reacts: [
         {
             user: [{
@@ -19,6 +24,10 @@ const chatsSchema = new Schema({
             }
         }
     ],
+    isEdit: {
+        type: Boolean,
+        default: false
+    },
     text: {
         type: String, 
         required: true,
