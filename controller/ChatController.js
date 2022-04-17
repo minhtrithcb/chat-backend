@@ -67,7 +67,7 @@ const ChatController = {
                 sender: req.body.sender
             },{
                 reCall: true,
-                text: "Tin nhắn đã bị thu hồi"
+                // text: "Tin nhắn đã bị thu hồi"
             }, {new: true})
 
             let room = await Conversation.findOneAndUpdate({

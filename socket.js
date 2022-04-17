@@ -67,58 +67,73 @@ const socketIo = (app) => {
         });
 
         // Event Stop pending chat
-        socket.on("stop-pendingChat", ({roomId, reciverId}) => {
-            let reciver = findUser(reciverId)
-            if (reciver[0]) {
-                io.to(roomId).to(reciver[0].skid).emit("stopPendingByFriend", true)
-            } else {
-                io.to(roomId).emit("stopPendingByFriend", true)
-            }
+        socket.on("stop-pendingChat", ({roomId, recivers}) => {
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                if (reciver[0]) {
+                    io.to(roomId).to(reciver[0].skid).emit("stopPendingByFriend", true)
+                } else {
+                    io.to(roomId).emit("stopPendingByFriend", true)
+                }
+            })
         });
 
         // Event pending chat 
-        socket.on("send-PendingChat", ({roomId, reciverId }) => {
+        socket.on("send-PendingChat", ({roomId, recivers, sender }) => {
             // Sent to friend Id
-            let reciver = findUser(reciverId)
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                
+                if (reciver[0]) {
+                    let reciverId = user._id 
 
-            if (reciver[0]) {
-                // Sent back new msg to reciver and room
-                io.to(roomId).to(reciver[0].skid).emit("getPendingByFriend", {
-                    roomId, 
-                    reciverId 
-                })
-            } else {
-                // Sent on room
-                io.to(roomId).emit("getPendingByFriend", true)
-            }
+                    // Sent back new msg to reciver and room
+                    io.to(roomId).to(reciver[0].skid).emit("getPendingByFriend", {
+                        roomId, 
+                        reciverId,
+                        sender
+                    })
+                } else {
+                    // Sent on room
+                    io.to(roomId).emit("getPendingByFriend", {sender})
+                }
+            });
+
         });
 
         // Event friend online to display last message
-        socket.on("sendToFriendOnline", ({friendId , ...data}) => {
+        socket.on("sendToFriendOnline", ({recivers , ...data}) => {
             // Sent to friend Id
-            let friend = findUser(friendId)
             let sender = findUser(data.sender)
-            if (friend[0] && sender[0]) {
-                // Sent back new msg to sender and reciver
-                io.to(friend[0].skid).to(sender[0].skid).emit("getSomeOneMessage", data)
-            } else if (sender[0]) {
-                // Sent back new msg for sender
-                io.to(sender[0].skid).emit("getSomeOneMessage", data)
-            }
+
+            recivers.forEach(user => {
+                let friend = findUser(user._id)
+            
+                if (friend[0] && sender[0]) {
+                    // Sent back new msg to sender and reciver
+                    io.to(friend[0].skid).to(sender[0].skid).emit("getSomeOneMessage", data)
+                } else if (sender[0]) {
+                    // Sent back new msg for sender
+                    io.to(sender[0].skid).emit("getSomeOneMessage", data)
+                }
+            })
         });
 
         // Event friend online to display last activity message (edit or recall)
-        socket.on("sendLastActivity", ({friendId , ...data}) => {
+        socket.on("sendLastActivity", ({recivers , ...data}) => {
             // Sent to friend Id
-            let friend = findUser(friendId)
             let sender = findUser(data.result.sender)
-            if (friend[0] && sender[0]) {
-                // Sent back new msg to sender and reciver
-                io.to(friend[0].skid).to(sender[0].skid).emit("getLastActivity", data)
-            } else if (sender[0]) {
-                // Sent back new msg for sender
-                io.to(sender[0].skid).emit("getLastActivity", data)
-            }
+
+            recivers.forEach(user => {
+                let friend = findUser(user._id) 
+                if (friend[0] && sender[0]) {
+                    // Sent back new msg to sender and reciver
+                    io.to(friend[0].skid).to(sender[0].skid).emit("getLastActivity", data)
+                } else if (sender[0]) {
+                    // Sent back new msg for sender
+                    io.to(sender[0].skid).emit("getLastActivity", data)
+                }
+            })
         });
 
         // Event Add friend online 

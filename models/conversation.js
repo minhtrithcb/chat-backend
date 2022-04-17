@@ -15,6 +15,9 @@ const conversationSchema = new Schema({
         type: Boolean,
         default: true
     },
+    type: {
+        type: String,
+    }
 },{
     versionKey: false,
     timestamps: true
