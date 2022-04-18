@@ -23,6 +23,18 @@ const ConversationController = {
             return res.json(error)
         }
     },
+    async getOne (req, res) {
+        try {
+            const conversation = await Conversation.findOne({
+                members : { $all : [req.body.currentUserId, req.body.friendId]},
+                type: "Friend"
+            })
+            .populate('members')
+            return res.json(conversation)
+        } catch (error) {
+            return res.json(error)
+        }
+    },
 
     // Post delete a Conversation => then delete all chat of this conversation
     async delete (req, res) {

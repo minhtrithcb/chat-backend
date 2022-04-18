@@ -5,6 +5,9 @@ const router = require("express").Router();
 // Route Get Conversation by userId
 router.post("/get", ConversationController.get)
 
+// Route Get One Conversation by userId
+router.post("/getOne", ConversationController.getOne)
+
 // Route Post create new Conversation 
 router.post("/postFriend", ConversationController.postFriend)
 
