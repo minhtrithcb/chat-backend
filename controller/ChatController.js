@@ -16,13 +16,14 @@ const ChatController = {
             await Conversation.findOneAndUpdate({
                 _id: req.body.roomId
             },{
-                lastMsg: saved
+                lastMsg: saved,
             })
             return res.json(saved)
         } catch (error) {
             return res.json(error)
         }
    },
+
     async patch (req,res) {
         try {
             let result = await Chat.findOneAndUpdate({

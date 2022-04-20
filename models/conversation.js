@@ -17,7 +17,10 @@ const conversationSchema = new Schema({
     },
     type: {
         type: String,
-    }
+    },
+    readBy : [{
+        type: Object
+    }]
 },{
     versionKey: false,
     timestamps: true

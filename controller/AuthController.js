@@ -56,7 +56,7 @@ const AuthController = {
                     return res.status(403).json({isLogin: false })
                 } else {        
                     // Create new accestTk & send back
-                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
+                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true
                     });
@@ -81,7 +81,7 @@ const AuthController = {
                     return res.status(403).json({isLogin: false })
                 } else {        
                     // Create new accestTk & send back
-                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '10m' })
+                    const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true
                     });
@@ -117,7 +117,7 @@ const AuthController = {
         if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
 
         // Create accessToken 
-        const accessToken = jwt.sign({ username: user.fullname, id : user._id}, A_TOKEN_SECRET, { expiresIn: '10m' })
+        const accessToken = jwt.sign({ username: user.fullname, id : user._id}, A_TOKEN_SECRET, { expiresIn: '1h' })
         
         // Create accessToken 
         const refreshToken = jwt.sign({ username: user.fullname, id : user._id}, R_TOKEN_SECRET, { expiresIn: '1d' })

@@ -16,8 +16,10 @@ const socketIo = (app) => {
 
     // Check in array add in not exist
     function addUser(uid , skid) {
-        !users.some(u => u.uid === uid) &&
-        users.push({uid, skid})
+        let notFound = !users.some(u => u.uid === uid)
+        if (notFound) {
+            users.push({uid, skid})
+        }
     }
 
     // Find In array user
@@ -31,6 +33,10 @@ const socketIo = (app) => {
     }
 
     io.on("connection", (socket) => {
+
+        socket.on("connect_error", (err) => {
+            console.log(`connect_error due to ${err.message}`);
+          });
 
         // User online push and get user Online
         console.log("User connect");
@@ -145,8 +151,8 @@ const socketIo = (app) => {
         })
 
         // User disconnect & remove this user online
-        socket.on("disconnect", () => {
-            console.log("User disconnect");
+        socket.on("disconnect", (reason) => {
+            console.log("User disconnect", reason);
             removeUser(socket.id)
             // update users online again
             io.emit("getUser", users)

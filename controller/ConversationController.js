@@ -23,6 +23,7 @@ const ConversationController = {
             return res.json(error)
         }
     },
+     // Get One Conversation by userId    
     async getOne (req, res) {
         try {
             const conversation = await Conversation.findOne({
@@ -35,6 +36,7 @@ const ConversationController = {
             return res.json(error)
         }
     },
+
 
     // Post delete a Conversation => then delete all chat of this conversation
     async delete (req, res) {
@@ -94,7 +96,57 @@ const ConversationController = {
         } catch (error) {
             return res.json(error)
         }
-    } 
+    } ,
+    // Get user unRead
+    async getUnReadMsg (req, res) {
+        try {
+            const result = await Conversation.findOne({
+                _id: req.body.roomId,
+            })
+            return res.json(result.readBy)
+        } catch (error) {
+            return res.json(error)
+        }
+    } ,
+
+    // Post user unRead
+    async countUserRead (req,res) {
+        try {
+            let found = await Conversation.findOne({
+                _id: req.body.roomId,
+                'readBy._id': {$all: req.body.recivers.map(i => i._id)}
+            })
+
+            if (found === null) {
+                let result = await Conversation.findOneAndUpdate({
+                    _id: req.body.roomId,
+                },{
+                    readBy : req.body.recivers
+                },{new: true})
+                
+                return res.json({msg: "first Push", result})
+            } else {
+                let result = await Conversation.findOneAndUpdate({
+                    _id: req.body.roomId,
+
+                },{
+                    $inc:  {
+                        'readBy.$[x].count': 1,
+                    }
+                },
+                {arrayFilters: [{
+                    'x._id': { $ne : req.body.senderId}
+                }], new: true})
+
+                return res.json({msg: "found", result})
+                
+            }
+
+
+        } catch (error) {
+            return res.json(error)
+        }
+   },
 
 }
 
