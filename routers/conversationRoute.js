@@ -12,9 +12,10 @@ router.post("/getOne", ConversationController.getOne)
 router.post("/postFriend", ConversationController.postFriend)
 
 // / ,cma caskjvdlkjas
-router.post("/getUnReadMsg", ConversationController.getUnReadMsg)
-// / ,cma caskjvdlkjas
-router.post("/countUserRead", ConversationController.countUserRead)
+router.post("/postReadMsg", ConversationController.postReadMsg)
+
+// Post all user UnRead Msg
+router.post("/postUnReadMsg", ConversationController.postUnReadMsg)
 
 // Route Post create group Conversation 
 router.post("/postGroup", ConversationController.postGroup)

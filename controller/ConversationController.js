@@ -97,26 +97,16 @@ const ConversationController = {
             return res.json(error)
         }
     } ,
-    // Get user unRead
-    async getUnReadMsg (req, res) {
-        try {
-            const result = await Conversation.findOne({
-                _id: req.body.roomId,
-            })
-            return res.json(result.readBy)
-        } catch (error) {
-            return res.json(error)
-        }
-    } ,
-
     // Post user unRead
-    async countUserRead (req,res) {
+    async postUnReadMsg (req,res) {
         try {
+            // Find in readBy 
             let found = await Conversation.findOne({
                 _id: req.body.roomId,
                 'readBy._id': {$all: req.body.recivers.map(i => i._id)}
             })
 
+            // Not Found push every users in readBy with defalt {0 (currentUser) , 1 (order) }
             if (found === null) {
                 let result = await Conversation.findOneAndUpdate({
                     _id: req.body.roomId,
@@ -125,10 +115,10 @@ const ConversationController = {
                 },{new: true})
                 
                 return res.json({msg: "first Push", result})
+            // increase all field count by one except user who send this
             } else {
                 let result = await Conversation.findOneAndUpdate({
                     _id: req.body.roomId,
-
                 },{
                     $inc:  {
                         'readBy.$[x].count': 1,
@@ -141,12 +131,29 @@ const ConversationController = {
                 return res.json({msg: "found", result})
                 
             }
-
-
         } catch (error) {
             return res.json(error)
         }
    },
+    // Post user Read message
+    async postReadMsg (req,res) {
+        try {
+            await Conversation.findOneAndUpdate({
+                _id: req.body.roomId,
+                'readBy._id': req.body.currentUserId
+            },{
+                $set:  {
+                    'readBy.$._id': req.body.currentUserId,
+                    'readBy.$.count': 0,
+                }
+            })
+
+            return res.json({msg: "Readed "})
+        } catch (error) {
+            return res.json(error)
+        }
+   },
+   
 
 }
 
