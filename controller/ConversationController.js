@@ -23,6 +23,18 @@ const ConversationController = {
             return res.json(error)
         }
     },
+     // Get all count unReadMsg Conversation by userId    
+     async getCountUnReadMsg (req, res) {
+        try {
+            const conversation = await Conversation.find({
+                members : { $in : [req.params.userId]},
+            })
+            
+            return res.json(conversation)
+        } catch (error) {
+            return res.json(error)
+        }
+    },
      // Get One Conversation by userId    
     async getOne (req, res) {
         try {

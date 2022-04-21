@@ -8,8 +8,6 @@ const connectDB = require('./DB/connectDB.js')
 const cookieParser = require('cookie-parser')
 const socketIo = require('./socket')
 const http = socketIo(app)
-
-// MIDDELWARE
 app.use(morgan('dev'))
 app.use(express.json());
 
