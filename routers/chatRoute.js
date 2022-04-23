@@ -17,7 +17,7 @@ router.post("/reply", ChatController.reply)
 router.post("/reaction", ChatController.addReacts)
 
 // Route Get all chat by roomId (ConvertationId)
-router.get("/:roomId", ChatController.get)
+router.get("/:roomId/:skip", ChatController.get)
 
 
 module.exports = router
