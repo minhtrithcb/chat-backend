@@ -16,6 +16,10 @@ router.get("/accessToken", AuthController.accessToken)
 // Route Get refresh Token
 router.get("/refreshToken", AuthController.refreshToken)
 
+// Route post forgot password
+router.post("/forgotPassword", AuthController.forgotPassword)
 
+// Route post forgot password
+router.post("/verify", AuthController.verify)
 
 module.exports = router

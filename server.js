@@ -16,14 +16,13 @@ app.use(cors({
     methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
-
 app.use(cookieParser());
+
 // CONNECT MONGODB
 connectDB();
 
 // ROUTER INIT
 routerInit(app);
-
 
 http.listen(PORT, () => {
     console.log(`Server chạy ở cổng ${PORT}`)

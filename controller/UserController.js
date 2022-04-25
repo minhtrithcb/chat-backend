@@ -1,3 +1,4 @@
+const Conversation = require("../models/conversation")
 const FriendReq = require("../models/friendReq")
 const User = require("../models/user")
 
@@ -38,10 +39,18 @@ const UserController = {
 
             const friendReq = FriendReq.find({'sender._id': currentUserId})
 
+            const groups = Conversation.find({
+                name : { '$regex' : req.body.search , '$options' : 'i'}
+            })
 
-            Promise.all([result, currentUser, friendReq])
-            .then(data => {
-                return res.json(data)
+            Promise.all([result, currentUser, friendReq, groups])
+            .then((data) => {
+                return res.json({
+                    users: data[0],
+                    friends: data[1].friend,
+                    friendReqs: data[2],
+                    groups: data[3]
+                })
             })
             
         } catch (err) {

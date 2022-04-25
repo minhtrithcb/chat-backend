@@ -7,5 +7,7 @@ module.exports = {
     DB_COLLECTION:  process.env.DB_COLLECTION,
     PORT:           process.env.PORT,
     A_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
-    R_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET
+    R_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+    GMAIL_EMAIL:    process.env.GMAIL_EMAIL,
+    GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
 }

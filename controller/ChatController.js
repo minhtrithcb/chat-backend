@@ -158,8 +158,6 @@ const ChatController = {
             const chat = await Chat.find({
                 roomId : req.params.roomId
             }).skip(req.params.skip).sort({createdAt: -1}).limit(20)
-
-            
             return res.json(chat)
         } catch (error) {
             return res.json(error)

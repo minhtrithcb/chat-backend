@@ -1,13 +1,13 @@
 const bcrypt = require('bcrypt');
 const User = require("../models/user")
-const {A_TOKEN_SECRET, R_TOKEN_SECRET} = require("../config/env.config")
+const {A_TOKEN_SECRET, R_TOKEN_SECRET, GMAIL_PASSWORD, GMAIL_EMAIL} = require("../config/env.config")
 const jwt = require("jsonwebtoken")
+const nodemailer = require("nodemailer");
 
 const AuthController = {
    
     // Post Sign up => email Check if exist & hash pass 
     async signup (req, res) {
-
         // Check email tồn tại
         const emailExi = await User.findOne({email: req.body.email})
         if (emailExi) return res.json({success: false, msg :"Email đã tồn tại"})
@@ -109,9 +109,11 @@ const AuthController = {
     // Post user Login 
     async login (req, res) {
         let user = await User.findOne({ email: req.body.email })
-        .select("_id fullname password")
+        .select("_id fullname password isVerifi email")
         // Check account exist
         if (!user) return res.json({success: false, msg: "Không tìm thấy tài khoản này"})
+
+        if (user && !user?.isVerifi) return res.json({success: false, isVerifi: false, email: user.email, msg: "Tài khoản này chưa xác thực"})
         // Check password
         const passValid = await bcrypt.compare(req.body.password , user.password)
         if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
@@ -134,6 +136,36 @@ const AuthController = {
         });
         // Sent back to user
         return res.json({success: true, isLogin: true , accessToken, msg: "Đăng nhập thành công"})
+    },
+
+    async verify (req, res) {
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //     host: 'smtp.gmail.com',
+        //     auth: {
+        //         user: GMAIL_EMAIL, 
+        //         pass: GMAIL_PASSWORD, 
+        //     },
+        // });
+
+        // const res = await transporter.sendMail({
+        //     from: req.body.email, // sender address
+        //     to: GMAIL_EMAIL, // list of receivers
+        //     subject: "Hello ✔", // Subject line
+        //     text: "Hello world?", // plain text body
+        //     html: "<b>Hello world?</b>", // html body
+        // });
+
+
+    },
+
+    // Post request forgot password
+    async forgotPassword (req, res) {
+        let email = req.body.email
+        let user = await User.findOne({ email })
+        if (!user?.isVerifi) return res.json({success: false})
+
+        return res.json({success: true})
     }
 }
 

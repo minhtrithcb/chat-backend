@@ -34,10 +34,6 @@ const socketIo = (app) => {
 
     io.on("connection", (socket) => {
 
-        socket.on("connect_error", (err) => {
-            console.log(`connect_error due to ${err.message}`);
-          });
-
         // User online push and get user Online
         console.log("User connect");
         socket.on("join server" , (uid) => {

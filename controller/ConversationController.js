@@ -49,7 +49,6 @@ const ConversationController = {
         }
     },
 
-
     // Post delete a Conversation => then delete all chat of this conversation
     async delete (req, res) {
         const currentUserId = req.body.currentUserId
@@ -81,7 +80,7 @@ const ConversationController = {
             return res.json(error)
         }
     },
-
+    // Post create new Group
     async postGroup (req, res) {
         const newConversation = new Conversation({
             members: req.body.members,
