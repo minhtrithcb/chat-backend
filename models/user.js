@@ -31,9 +31,6 @@ const UsersSchema = new Schema({
     friend: [{ 
         type: Schema.ObjectId, ref: 'users' 
     }],
-    googleId: {
-        type: String
-    }
 },{
     versionKey: false,
     timestamps: true

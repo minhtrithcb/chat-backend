@@ -19,7 +19,10 @@ router.get("/refreshToken", AuthController.refreshToken)
 // Route post forgot password
 router.post("/forgotPassword", AuthController.forgotPassword)
 
-// Route post forgot password
-router.post("/verify", AuthController.verify)
+// Route post send veritfy
+router.post("/send-verify", AuthController.sendVerify)
+
+// Route post check veritfy
+router.post("/check-verify", AuthController.checkVerifyOTP)
 
 module.exports = router

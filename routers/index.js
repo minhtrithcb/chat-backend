@@ -1,9 +1,9 @@
 const authMiddleware = require('../middleware/auth');
-const authRoute = require('./authRoute')
-const userRoute = require('./userRoute')
-const chatRoute = require('./chatRoute')
-const friendReqRoute = require('./friendReqRoute')
-const conversationRoute = require('./conversationRoute')
+const authRoute = require('./auth.route')
+const userRoute = require('./user.route')
+const chatRoute = require('./chat.route')
+const friendReqRoute = require('./friendReq.route')
+const conversationRoute = require('./conversation.route')
 
 function routerInit(app) {
      // router for Auth

@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const User = require("../models/user")
-const {A_TOKEN_SECRET, R_TOKEN_SECRET, GMAIL_PASSWORD, GMAIL_EMAIL} = require("../config/env.config")
+const verifyOtp = require("../models/verifyOtp")
+const {A_TOKEN_SECRET, R_TOKEN_SECRET, GMAIL_EMAIL} = require("../config/env.config")
+const transporter = require("../config/nodeMail.config")
 const jwt = require("jsonwebtoken")
-const nodemailer = require("nodemailer");
 
 const AuthController = {
    
@@ -138,25 +139,65 @@ const AuthController = {
         return res.json({success: true, isLogin: true , accessToken, msg: "Đăng nhập thành công"})
     },
 
-    async verify (req, res) {
-        // const transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     host: 'smtp.gmail.com',
-        //     auth: {
-        //         user: GMAIL_EMAIL, 
-        //         pass: GMAIL_PASSWORD, 
-        //     },
-        // });
+    // Check Verify OTP
+    async checkVerifyOTP (req, res) {
+        try {
+            // Get the lasted otp
+            const result = await verifyOtp.find({
+                email: req.body.email
+            }).sort({createdAt: -1}).limit(1)
+            // Check if not exies
+            if (!result[0]) return res.send({success: false, msg: "Không tìm thấy mã OTP"})
+            
+            // Check expireAt
+            if (result[0].expireAt < Date.now()) {
+                await verifyOtp.deleteMany({email: req.body.email})
+                res.send({success: false, msg: "Mã OTP đã hết hạn"})
+            } else {
+                const otpValid = await bcrypt.compare(req.body.otp , result[0].otp)
+                if (!otpValid) return res.send({success: false, msg: "Mã OTP không đúng"})
+                
+                // Change status of user
+                await User.findOneAndUpdate({
+                    email: req.body.email
+                },{ 
+                    isVerifi: true
+                })
+                await verifyOtp.deleteMany({email: req.body.email})
+                // Send true okay            
+                return res.json({success: true, msg: "Xác thực thành công"})
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    
+    // Post User send email vertify
+    async sendVerify (req, res) {
+        try {
+            const otp = Math.floor(1000 + Math.random() * 9000);
+            const hashOtp = await bcrypt.hash(`${otp}`, 10)
 
-        // const res = await transporter.sendMail({
-        //     from: req.body.email, // sender address
-        //     to: GMAIL_EMAIL, // list of receivers
-        //     subject: "Hello ✔", // Subject line
-        //     text: "Hello world?", // plain text body
-        //     html: "<b>Hello world?</b>", // html body
-        // });
-
-
+            const mailInfo = {
+                from: `ADMIN <${GMAIL_EMAIL}>`, 
+                to: req.body.email, 
+                subject: "Thư xác thực email",
+                text: `${otp}`, 
+                html: `<p>Mã xác thực của bạn là <h1>${otp}</h1>`, 
+            };
+            
+            await verifyOtp.create({
+                email: req.body.email, 
+                otp: hashOtp,
+                expireAt: Date.now() + 3600000
+            })
+            transporter.sendMail(mailInfo)
+            return res.json({success : true, msg: 'Gửi mail thành công'})
+            
+        } catch (error) {
+            console.log(error);
+            return res.json({success : false, msg: "Gửi mail thất bại"})
+        }
     },
 
     // Post request forgot password
