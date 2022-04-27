@@ -25,4 +25,10 @@ router.post("/send-verify", AuthController.sendVerify)
 // Route post check veritfy
 router.post("/check-verify", AuthController.checkVerifyOTP)
 
+// Route post check token
+router.post("/check-token-reset-pass", AuthController.checkValidResetPass)
+
+// Route post reset password
+router.post("/reset-password", AuthController.resetPassword)
+
 module.exports = router

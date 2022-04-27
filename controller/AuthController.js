@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require("../models/user")
 const verifyOtp = require("../models/verifyOtp")
-const {A_TOKEN_SECRET, R_TOKEN_SECRET, GMAIL_EMAIL} = require("../config/env.config")
+const {A_TOKEN_SECRET, R_TOKEN_SECRET, GMAIL_EMAIL, RESET_PASSWORD, CLIENT_SITE} = require("../config/env.config")
 const transporter = require("../config/nodeMail.config")
 const jwt = require("jsonwebtoken")
 
@@ -182,8 +182,8 @@ const AuthController = {
                 from: `ADMIN <${GMAIL_EMAIL}>`, 
                 to: req.body.email, 
                 subject: "Thư xác thực email",
-                text: `${otp}`, 
-                html: `<p>Mã xác thực của bạn là <h1>${otp}</h1>`, 
+                text: `<h1>${otp}<h1>`, 
+                html: `<p>Mã xác thực của bạn là <h1>${otp}<h1> <br> Lưu ý mã chỉ có hiệu lực 1 tiếng </p>`, 
             };
             
             await verifyOtp.create({
@@ -202,12 +202,62 @@ const AuthController = {
 
     // Post request forgot password
     async forgotPassword (req, res) {
-        let email = req.body.email
-        let user = await User.findOne({ email })
-        if (!user?.isVerifi) return res.json({success: false})
+        try {
+            const user = await User.findOne({ email: req.body.email })
+            if (!user) return res.json({success: false, msg: "Email không tồn tại"})
+            const token = jwt.sign({_id: user._id}, RESET_PASSWORD, {
+                expiresIn : "10m"
+            })
+            const mailInfo = {
+                from: `ADMIN <${GMAIL_EMAIL}>`, 
+                to: req.body.email, 
+                subject: "Thư xác nhân đổi mật khẩu", 
+                html: `<p>Nhấn vào đường dẫn này để đổi mật khẩu <a href="${CLIENT_SITE}/change-password/${token}">Tới trang đổi mật khẩu</a> 
+                    <br> Lưu ý mã chỉ có hiệu lực 10 phút
+                </p>`, 
+            };
+            transporter.sendMail(mailInfo)
+            return res.json({success : true, msg: 'Gửi thành công hãy kiểm tra mail của bạn'})
+        } catch (error) {
+            console.log(error);
+            return res.json({success : false, msg: "Gửi mail thất bại"})
+        }
+    },
 
-        return res.json({success: true})
-    }
+    // Post Check reset token
+    async checkValidResetPass (req, res) {
+        try {
+            const token = req.body.token 
+            jwt.verify(token, RESET_PASSWORD, (err, data) => {
+                if (err) {
+                    return res.json({success : false, msg: "Token đã quá hạn"})
+                } else {
+                    return res.json({success: true ,_id: data._id, msg: "Token còn hạn"})
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return res.json({success : false, msg: "Đã có lỗi xảy ra"})
+        }
+    },
+    // Post reset password
+    async resetPassword (req, res) {
+        try {
+            const hashPass = await bcrypt.hash(`${req.body.password}`, 10)
+            // const token = req.body.token 
+            const userUpdate = await User.findByIdAndUpdate(req.body.userId, {
+                password: hashPass
+            }, {new: true}) 
+
+            if (!userUpdate) return res.json({success : false, msg: "Đã có lỗi xảy ra"})
+            return res.json({success : true, msg: "Đã cập nhật mật khẩu"})
+        } catch (error) {
+            console.log(error);
+            return res.json({success : false, msg: "Đã có lỗi xảy ra"})
+        }
+    },
+
+
 }
 
 module.exports = AuthController

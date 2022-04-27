@@ -10,4 +10,6 @@ module.exports = {
     R_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
     GMAIL_EMAIL:    process.env.GMAIL_EMAIL,
     GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
+    CLIENT_SITE:    process.env.CLIENT_SITE,
+    RESET_PASSWORD: process.env.RESET_PASSWORD,
 }
