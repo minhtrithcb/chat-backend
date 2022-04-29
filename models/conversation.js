@@ -4,6 +4,9 @@ const conversationSchema = new Schema({
     members: [{ 
         type: Schema.Types.ObjectId, ref: 'users' 
     }],
+    membersLeave: [{ 
+        type: Schema.Types.ObjectId, ref: 'users' 
+    }],
     name: {
         type: String, 
     },

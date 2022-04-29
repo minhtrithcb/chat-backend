@@ -8,7 +8,8 @@ const ChatController = {
         const newChat = new Chat({
             roomId: req.body.roomId,
             sender: req.body.sender,
-            text: req.body.text
+            text: req.body.text,
+            type: req.body.type
         })
 
         try {

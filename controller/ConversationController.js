@@ -11,6 +11,7 @@ const ConversationController = {
                     members : { $in : [userId]},
                 }).sort({updatedAt : -1})
                 .populate('members')
+                .populate('membersLeave')
                 return res.json(conversation)
             } else {
                 const conversation = await Conversation.find({
@@ -18,6 +19,7 @@ const ConversationController = {
                     type
                 }).sort({updatedAt : -1})
                 .populate('members')
+                .populate('membersLeave')
                 return res.json(conversation)
             }
         } catch (error) {
@@ -115,7 +117,7 @@ const ConversationController = {
             // Find in readBy 
             let found = await Conversation.findOne({
                 _id: req.body.roomId,
-                'readBy._id': {$all: req.body.recivers.map(i => i._id)}
+                // 'readBy._id': {$all: req.body.recivers.map(i => i._id)}
             })
 
             // Not Found push every users in readBy with defalt {0 (currentUser) , 1 (order) }
@@ -163,6 +165,25 @@ const ConversationController = {
             return res.json({msg: "Readed "})
         } catch (error) {
             return res.json(error)
+        }
+   },
+    // Post user Read message
+    async leaveGroup (req,res) {
+        try {
+            await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            },{
+                $pull:  {
+                    members: req.body.currentUserId,
+                },
+                $push: {
+                    membersLeave: req.body.currentUserId,
+                }
+            })
+
+            return res.json({success: true, msg: "User leave"})
+        } catch (error) {
+            return res.json({ success: false, msg: error})
         }
    },
    

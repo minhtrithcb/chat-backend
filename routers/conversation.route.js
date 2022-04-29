@@ -9,7 +9,7 @@ router.get("/get", ConversationController.get)
 router.get("/getCountUnReadMsg/:userId", ConversationController.getCountUnReadMsg)
 
 // Route Get One Conversation by userId
-// router.post("/getOne", ConversationController.getOne)
+router.post("/getOne", ConversationController.getOne)
 
 // Route Post create new Conversation 
 router.post("/postFriend", ConversationController.postFriend)
@@ -25,6 +25,9 @@ router.post("/postGroup", ConversationController.postGroup)
 
 // Post delete a Conversation => then delete all chat of this conversation
 router.post("/delete", ConversationController.delete)
+
+// Post delete a Conversation => then delete all chat of this conversation
+router.post("/leave-group", ConversationController.leaveGroup)
 
 // Route Get the last message by roomId
 router.get("/lastMsg/:roomId", ConversationController.lastMsg)
