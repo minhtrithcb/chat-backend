@@ -3,13 +3,13 @@ const router = require("express").Router();
 
 
 // Route Get Conversation by userId
-router.post("/get", ConversationController.get)
+router.get("/get", ConversationController.get)
 
 // Get all unRead conversation
 router.get("/getCountUnReadMsg/:userId", ConversationController.getCountUnReadMsg)
 
 // Route Get One Conversation by userId
-router.post("/getOne", ConversationController.getOne)
+// router.post("/getOne", ConversationController.getOne)
 
 // Route Post create new Conversation 
 router.post("/postFriend", ConversationController.postFriend)

@@ -5,16 +5,17 @@ const ConversationController = {
      // Get all Conversation by userId    
      async get (req, res) {
         try {
-            if (req.body.type === "All") {
+            const {userId, type} = req.query
+            if (type === "All") {
                 const conversation = await Conversation.find({
-                    members : { $in : [req.body.userId]},
+                    members : { $in : [userId]},
                 }).sort({updatedAt : -1})
                 .populate('members')
                 return res.json(conversation)
             } else {
                 const conversation = await Conversation.find({
-                    members : { $in : [req.body.userId]},
-                    type: req.body.type  
+                    members : { $in : [userId]},
+                    type
                 }).sort({updatedAt : -1})
                 .populate('members')
                 return res.json(conversation)
