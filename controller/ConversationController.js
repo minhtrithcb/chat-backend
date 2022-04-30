@@ -167,7 +167,7 @@ const ConversationController = {
             return res.json(error)
         }
    },
-    // Post user Read message
+    // Post user leave group
     async leaveGroup (req,res) {
         try {
             await Conversation.findOneAndUpdate({
@@ -182,6 +182,19 @@ const ConversationController = {
             })
 
             return res.json({success: true, msg: "User leave"})
+        } catch (error) {
+            return res.json({ success: false, msg: error})
+        }
+   },
+    // Post Group master Delete group
+    async deleteGroup (req,res) {
+        try {
+            await Conversation.findOneAndDelete({
+                _id: req.body.roomId,
+                owner: req.body.currentUserId
+            })
+
+            return res.json({success: true, msg: "User delete group"})
         } catch (error) {
             return res.json({ success: false, msg: error})
         }

@@ -26,8 +26,11 @@ router.post("/postGroup", ConversationController.postGroup)
 // Post delete a Conversation => then delete all chat of this conversation
 router.post("/delete", ConversationController.delete)
 
-// Post delete a Conversation => then delete all chat of this conversation
+// Post user leave group
 router.post("/leave-group", ConversationController.leaveGroup)
+
+// Post group master out > delete group
+router.post("/delete-group", ConversationController.deleteGroup)
 
 // Route Get the last message by roomId
 router.get("/lastMsg/:roomId", ConversationController.lastMsg)

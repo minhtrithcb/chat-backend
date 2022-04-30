@@ -103,6 +103,42 @@ const socketIo = (app) => {
 
         });
 
+        socket.on("send-deleteGroup", ({roomId, recivers, sender }) => {
+            // Sent to friend Id
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                
+                if (reciver[0]) {
+                    let reciverId = user._id 
+
+                    // Sent back new msg to reciver and room
+                    io.to(roomId).to(reciver[0].skid).emit("getDeleteGroup", {
+                        roomId, 
+                        reciverId,
+                        sender
+                    })
+                }
+            });
+        });
+
+        socket.on("send-createGroup", ({recivers, sender, group}) => {
+            // Sent to friend Id
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                
+                if (reciver[0]) {
+                    let reciverId = user._id 
+
+                    // Sent back new msg to reciver and room
+                    io.to(reciver[0].skid).emit("getCreateGroup", {
+                        reciverId,
+                        sender,
+                        group
+                    })
+                }
+            });
+        });
+
         // Event friend online to display last message
         socket.on("sendToFriendOnline", ({recivers , ...data}) => {
             // Sent to friend Id
