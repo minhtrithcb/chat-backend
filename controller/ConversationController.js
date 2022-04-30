@@ -117,7 +117,7 @@ const ConversationController = {
             // Find in readBy 
             let found = await Conversation.findOne({
                 _id: req.body.roomId,
-                // 'readBy._id': {$all: req.body.recivers.map(i => i._id)}
+                'readBy._id': {$all: req.body.recivers.map(i => i._id)}
             })
 
             // Not Found push every users in readBy with defalt {0 (currentUser) , 1 (order) }
