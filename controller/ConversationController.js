@@ -89,6 +89,9 @@ const ConversationController = {
             members: req.body.members,
             owner: req.body.owner,
             name: req.body.nameGroup,
+            des: req.body.des,
+            rule: req.body.rule,
+            private: req.body.privacy,
             type: "Group"
         })
 

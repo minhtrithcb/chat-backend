@@ -7,23 +7,22 @@ const conversationSchema = new Schema({
     membersLeave: [{ 
         type: Schema.Types.ObjectId, ref: 'users' 
     }],
-    name: {
-        type: String, 
-    },
     owner: { 
         type: Schema.Types.ObjectId, ref: 'users' 
     },
-    lastMsg: Object,
     private: {
         type: Boolean,
-        default: true
-    },
-    type: {
-        type: String,
+        default: false
     },
     readBy : [{
         type: Object
-    }]
+    }],
+    lastMsg: Object,
+    name: String,
+    type: String,
+    inviteCode: String,
+    rule: String,
+    des: String
 },{
     versionKey: false,
     timestamps: true
