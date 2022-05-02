@@ -54,9 +54,14 @@ const ChatController = {
             text: req.body.text,
             replyMsg: req.body.replyMsg
         })
-
+        
         try {
             const saved = await newChat.save();
+            await Conversation.findOneAndUpdate({
+                _id: req.body.roomId,
+            }, {
+                lastMsg: saved
+            })
             return res.json(saved)
         } catch (error) {
             return res.json(error)
@@ -69,7 +74,6 @@ const ChatController = {
                 sender: req.body.sender
             },{
                 reCall: true,
-                // text: "Tin nhắn đã bị thu hồi"
             }, {new: true})
 
             let room = await Conversation.findOneAndUpdate({
