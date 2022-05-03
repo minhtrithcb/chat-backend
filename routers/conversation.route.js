@@ -8,8 +8,11 @@ router.get("/get", ConversationController.get)
 // Get all unRead conversation
 router.get("/getCountUnReadMsg/:userId", ConversationController.getCountUnReadMsg)
 
-// Route Get One Conversation by userId
+// Route Get One Conversation Friend by userId
 router.post("/getOne", ConversationController.getOne)
+
+// Route Get One Conversation Group by userId
+router.post("/getOneGroup", ConversationController.getOneGroup)
 
 // Route Post create new Conversation 
 router.post("/postFriend", ConversationController.postFriend)

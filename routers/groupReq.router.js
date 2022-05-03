@@ -1,20 +1,20 @@
 const GroupReqController = require("../controller/GroupReqController");
 const router = require("express").Router();
 
-// Route get friend request by sender
-router.get("/friend-request/:sender", GroupReqController.getFriendReq)
+// Route get group request by sender
+router.get("/group-request/:sender", GroupReqController.getGroupReq)
 
-// Route get accept friend request by reciver
-router.get("/accept-friend-request/:reciver", GroupReqController.getAcceptFriendReq)
+// Route get accept group request by reciver
+router.get("/accept-group-request/:reciver", GroupReqController.getAcceptGroupReq)
 
-// Route post reciver accept friend request
-router.post("/accept-friend-request", GroupReqController.acceptFriendReq)
+// Route post reciver accept group request
+router.post("/accept-group-request", GroupReqController.acceptGroupReq)
 
-// Route post create friend request
-router.post("/create-friend-request", GroupReqController.createFriendReqs)
+// Route post create group request
+router.post("/create-group-request", GroupReqController.createGroupReqs)
 
-// Route post unsend friend request
-router.post("/unsend-friend-request", GroupReqController.unSendFriendReq)
+// Route post unsend group request
+router.post("/unsend-group-request", GroupReqController.unSendGroupReq)
 
 
 module.exports = router

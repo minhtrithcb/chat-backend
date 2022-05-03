@@ -1,13 +1,14 @@
-const FriendReq = require("../models/friendReq");
+const GroupReq = require("../models/groupReq");
 const User = require("../models/user");
 
 const GroupReqController = {
 
-    // post create friend request
-    async createFriendReqs(req,res) {
-        const newFriendReq = new FriendReq({
+    // post create Group request
+    async createGroupReqs(req,res) {
+        const newFriendReq = new GroupReq({
             sender: req.body.sender,
-            reciver: req.body.reciver
+            reciver: req.body.reciver,
+            room: req.body.room
         })
         try {
             const saved = await newFriendReq.save();
@@ -17,10 +18,10 @@ const GroupReqController = {
         }
     },
 
-    // get friend request by sender
-    async getFriendReq(req, res) {    
+    // get Group request by sender
+    async getGroupReq(req, res) {    
         try {
-            const result = await FriendReq.find({
+            const result = await GroupReq.find({
                 'sender._id' : {$in :[req.params.sender]}
             })
             return res.json(result)
@@ -29,10 +30,10 @@ const GroupReqController = {
         }
     },
 
-    // get accept friend request by reciver
-    async getAcceptFriendReq(req, res) {    
+    // get accept Group request by reciver
+    async getAcceptGroupReq(req, res) {    
         try {
-            const result = await FriendReq.find({
+            const result = await GroupReq.find({
                 'reciver._id' : {$in :[req.params.reciver]}
             })
             return res.json(result)
@@ -41,8 +42,8 @@ const GroupReqController = {
         }
     },
 
-    // post reciver accept friend request => update friendList sender & reciver then delete Friend Request
-    async acceptFriendReq(req, res) {    
+    // post reciver accept Group request => update friendList sender & reciver then delete Group Request
+    async acceptGroupReq(req, res) {    
         try {
             /// add sender -> currUser
             const updateCurrUser = User.findOneAndUpdate({
@@ -68,11 +69,11 @@ const GroupReqController = {
         }
     },
 
-    // post unsend friend request => delete Friend request
-    async unSendFriendReq(req, res) {    
+    // post unsend Group request => delete Group request
+    async unSendGroupReq(req, res) {    
         const reqId = req.body.reqId
         try {
-            await FriendReq.findOneAndRemove({ _id : reqId})
+            await GroupReq.findOneAndRemove({ _id : reqId})
             return res.json({msg : "Unsend success"})
         } catch (error) {
             return res.json(error)

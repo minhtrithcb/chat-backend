@@ -182,6 +182,14 @@ const socketIo = (app) => {
             }
         })
 
+        // Event Add group online 
+        socket.on("sendGroupRequest", ({reciverId, ...data}) => {
+            let reciver = findUser(reciverId)
+            if (reciver[0]) {
+                io.to(reciver[0].skid).emit("getGroupRequest", data)
+            }
+        })
+
         // User disconnect & remove this user online
         socket.on("disconnect", (reason) => {
             console.log("User disconnect", reason);

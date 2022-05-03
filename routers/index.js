@@ -1,5 +1,6 @@
 const authMiddleware = require('../middleware/auth');
 const authRoute = require('./auth.route')
+const groupReqRoute = require('./groupReq.router')
 const userRoute = require('./user.route')
 const chatRoute = require('./chat.route')
 const friendReqRoute = require('./friendReq.route')
@@ -17,6 +18,9 @@ function routerInit(app) {
      
      // router for Friend Request
      app.use("/api/friendReq", authMiddleware, friendReqRoute);
+     
+     // router for Group Request
+     app.use("/api/groupReq", authMiddleware, groupReqRoute);
      
      // router For chat 
      app.use("/api/chat", authMiddleware, chatRoute);

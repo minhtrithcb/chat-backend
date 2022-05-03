@@ -6,6 +6,9 @@ const GroupReqSchema = new Schema({
     }, 
     reciver : {
         type: Object
+    },
+    room : {
+        type: Object
     }
 },{
     versionKey: false,

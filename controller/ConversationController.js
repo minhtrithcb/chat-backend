@@ -38,7 +38,7 @@ const ConversationController = {
             return res.json(error)
         }
     },
-     // Get One Conversation by userId    
+     // Get One Friend Conversation by userId    
     async getOne (req, res) {
         try {
             const conversation = await Conversation.findOne({
@@ -50,6 +50,19 @@ const ConversationController = {
         } catch (error) {
             return res.json(error)
         }
+    },
+    // Get One Friend Conversation by userId    
+    async getOneGroup (req, res) {
+        // try {
+        //     const conversation = await Conversation.findOne({
+        //         members : { $all : [req.body.currentUserId, req.body.friendId]},
+        //         type: "Friend"
+        //     })
+        //     .populate('members')
+        //     return res.json(conversation)
+        // } catch (error) {
+        //     return res.json(error)
+        // }
     },
 
     // Post delete a Conversation => then delete all chat of this conversation
