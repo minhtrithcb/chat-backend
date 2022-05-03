@@ -1,5 +1,5 @@
+const Conversation = require("../models/conversation");
 const GroupReq = require("../models/groupReq");
-const User = require("../models/user");
 
 const GroupReqController = {
 
@@ -45,25 +45,17 @@ const GroupReqController = {
     // post reciver accept Group request => update friendList sender & reciver then delete Group Request
     async acceptGroupReq(req, res) {    
         try {
-            /// add sender -> currUser
-            const updateCurrUser = User.findOneAndUpdate({
-                _id: req.body.currentUserId
-            },{
-                $push: {friend: req.body.sender}
+            await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            }, {
+                $push : {
+                    members: req.body.senderId 
+                }
             })
 
-            const updateFriendUser = User.findOneAndUpdate({
-                _id: req.body.sender
-            },{
-                $push: {friend: req.body.currentUserId}
-            })
+            await GroupReq.findOneAndRemove({ _id : req.body.reqId})
 
-            const deleteFr = FriendReq.findOneAndRemove({ _id : req.body.id})
-
-            Promise.all([updateCurrUser, updateFriendUser, deleteFr])
-            .then(() => {
-                return res.json({success: true})
-            })
+            return res.json({success: true})
         } catch (error) {
             return res.json(error)
         }
