@@ -192,7 +192,7 @@ const ConversationController = {
                 $pull:  {
                     members: req.body.currentUserId,
                 },
-                $push: {
+                $addToSet: {
                     membersLeave: req.body.currentUserId,
                 }
             })

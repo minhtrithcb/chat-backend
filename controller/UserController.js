@@ -1,5 +1,6 @@
 const Conversation = require("../models/conversation")
 const FriendReq = require("../models/friendReq")
+const GroupReq = require("../models/groupReq")
 const User = require("../models/user")
 
 const UserController = {
@@ -24,7 +25,7 @@ const UserController = {
         try {
             const currentUserId = req.body.currentUser // id
 
-            const result = User.find({
+            const userSearch = User.find({
                 _id: {$ne: currentUserId},
                 $or: [{
                     "fullname":  { '$regex' : req.body.search , '$options' : 'i'},
@@ -43,13 +44,24 @@ const UserController = {
                 name : { '$regex' : req.body.search , '$options' : 'i'}
             })
 
-            Promise.all([result, currentUser, friendReq, groups])
+            const groupReq = GroupReq.find({
+                'sender._id' : currentUserId
+            })
+
+            const converGroup =  Conversation.find({
+                members : { $in : [currentUserId]},
+                type: "Group"
+            })
+
+            Promise.all([userSearch, currentUser, friendReq, groups, groupReq, converGroup])
             .then((data) => {
                 return res.json({
                     users: data[0],
-                    friends: data[1].friend,
+                    userFriends: data[1].friend,
                     friendReqs: data[2],
-                    groups: data[3]
+                    groups: data[3],
+                    groupReq: data[4],
+                    userGroup: data[5]
                 })
             })
             
