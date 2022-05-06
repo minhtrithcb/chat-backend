@@ -12,4 +12,5 @@ module.exports = {
     GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
     CLIENT_SITE:    process.env.CLIENT_SITE,
     RESET_PASSWORD: process.env.RESET_PASSWORD,
+    INVITE_LINK: process.env.INVITE_LINK,
 }

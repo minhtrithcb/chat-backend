@@ -1,5 +1,7 @@
 const Chat = require("../models/chat");
 const Conversation = require("../models/conversation")
+const {CLIENT_SITE , INVITE_LINK} = require('../config/env.config')
+const jwt = require("jsonwebtoken")
 
 const ConversationController = {
      // Get all Conversation by userId    
@@ -51,20 +53,47 @@ const ConversationController = {
             return res.json(error)
         }
     },
-    // Get One Friend Conversation by userId    
-    async getOneGroup (req, res) {
-        // try {
-        //     const conversation = await Conversation.findOne({
-        //         members : { $all : [req.body.currentUserId, req.body.friendId]},
-        //         type: "Friend"
-        //     })
-        //     .populate('members')
-        //     return res.json(conversation)
-        // } catch (error) {
-        //     return res.json(error)
-        // }
-    },
 
+    // Post edit group by master 
+    async editGroup (req, res) {
+        try {
+            let result = await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            },{
+                name: req.body.name,
+                des: req.body.des,
+                rule: req.body.rule,
+                private: req.body.privacy,
+            },{new: true}) 
+            .populate('members')
+            .populate('membersLeave')
+            return res.json({msg: "update success", success: true , result})
+        } catch (error) {
+            return res.json(error)
+        }
+    },
+    // 
+    async getInviteCode (req, res) {
+        try {
+            const found = await Conversation.findOne({
+                _id: req.body.roomId
+            })
+            if (found.inviteCode !== '') {
+                jwt.verify(found.inviteCode, INVITE_LINK, (err, data) => {
+                    if (err) return res.json({ success: false , err})
+                    
+                    return res.json({ success: true })
+                })
+            } else {
+                // Create new link
+                const link = jwt.sign({ roomId: found._id }, INVITE_LINK, { expiresIn: '10s' })
+                return res.json({ success: true, link })
+            }
+            return res.json({ success: false , msg: "not found converstion"})
+        } catch (error) {
+            return res.json(error)
+        }
+    },
     // Post delete a Conversation => then delete all chat of this conversation
     async delete (req, res) {
         const currentUserId = req.body.currentUserId
@@ -98,6 +127,7 @@ const ConversationController = {
     },
     // Post create new Group
     async postGroup (req, res) {
+
         const newConversation = new Conversation({
             members: req.body.members,
             owner: req.body.owner,
@@ -110,7 +140,7 @@ const ConversationController = {
 
         try {
             const saved = await newConversation.save();
-            return res.json({msg: "Create success", success: true ,saved})
+            return res.json({msg: "Create success", success: true , saved})
         } catch (error) {
             return res.json(error)
         }

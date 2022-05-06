@@ -60,7 +60,21 @@ const GroupReqController = {
             return res.json(error)
         }
     },
-
+    // 
+    async acceptGroupPublic(req, res) {    
+        try {
+            await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            }, {
+                $push : {
+                    members: req.body.senderId 
+                }
+            })
+            return res.json({success: true})
+        } catch (error) {
+            return res.json(error)
+        }
+    },
     // post unsend Group request => delete Group request
     async unSendGroupReq(req, res) {    
         const reqId = req.body.reqId

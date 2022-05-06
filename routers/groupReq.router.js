@@ -10,6 +10,9 @@ router.get("/accept-group-request/:reciver", GroupReqController.getAcceptGroupRe
 // Route post reciver accept group request
 router.post("/accept-group-request", GroupReqController.acceptGroupReq)
 
+// Route post accept group public request
+router.post("/accept-group-public", GroupReqController.acceptGroupPublic)
+
 // Route post create group request
 router.post("/create-group-request", GroupReqController.createGroupReqs)
 

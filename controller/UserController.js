@@ -41,7 +41,7 @@ const UserController = {
             const friendReq = FriendReq.find({'sender._id': currentUserId})
 
             const groups = Conversation.find({
-                name : { '$regex' : req.body.search , '$options' : 'i'}
+                name : { '$regex' : req.body.search , '$options' : 'i'},
             })
 
             const groupReq = GroupReq.find({

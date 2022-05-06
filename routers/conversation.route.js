@@ -12,7 +12,7 @@ router.get("/getCountUnReadMsg/:userId", ConversationController.getCountUnReadMs
 router.post("/getOne", ConversationController.getOne)
 
 // Route Get One Conversation Group by userId
-router.post("/getOneGroup", ConversationController.getOneGroup)
+// router.post("/getOneGroup", ConversationController.getOneGroup)
 
 // Route Post create new Conversation 
 router.post("/postFriend", ConversationController.postFriend)
@@ -34,6 +34,9 @@ router.post("/leave-group", ConversationController.leaveGroup)
 
 // Post group master out > delete group
 router.post("/delete-group", ConversationController.deleteGroup)
+
+// Post edit group by master 
+router.post("/edit-group", ConversationController.editGroup)
 
 // Route Get the last message by roomId
 router.get("/lastMsg/:roomId", ConversationController.lastMsg)
