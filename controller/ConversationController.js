@@ -109,7 +109,6 @@ const ConversationController = {
             return res.json(error)
         }
     },
-
     // Post create new Conversation 
     async postFriend (req, res) {
         const newConversation = new Conversation({
@@ -216,7 +215,7 @@ const ConversationController = {
     // Post user leave group
     async leaveGroup (req,res) {
         try {
-            await Conversation.findOneAndUpdate({
+            const result = await Conversation.findOneAndUpdate({
                 _id: req.body.roomId
             },{
                 $pull:  {
@@ -225,9 +224,11 @@ const ConversationController = {
                 $addToSet: {
                     membersLeave: req.body.currentUserId,
                 }
-            })
+            }, {new: true}) 
+            .populate('members')
+            .populate('membersLeave')
 
-            return res.json({success: true, msg: "User leave"})
+            return res.json({success: true, msg: "User leave", result})
         } catch (error) {
             return res.json({ success: false, msg: error})
         }

@@ -50,6 +50,9 @@ const GroupReqController = {
             }, {
                 $push : {
                     members: req.body.senderId 
+                },
+                $pull: {
+                    membersLeave: req.body.senderId 
                 }
             })
 
