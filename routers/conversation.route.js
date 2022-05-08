@@ -41,5 +41,11 @@ router.post("/edit-group", ConversationController.editGroup)
 // Route Get the last message by roomId
 router.get("/lastMsg/:roomId", ConversationController.lastMsg)
 
+// Post ban by master 
+router.post("/ban-user", ConversationController.bannedUser)
+
+// Post unban by master 
+router.post("/unBan-user", ConversationController.unBannedUser)
+
 
 module.exports = router

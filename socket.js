@@ -80,6 +80,22 @@ const socketIo = (app) => {
             })
         });
 
+        // Event mute user
+        socket.on("send-muteUser", ({roomId, recivers}) => {
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                io.to(reciver[0].skid).emit("getMuteUser",{ roomId, user})
+            })
+        });
+
+        // Event unmute user
+        socket.on("send-unMute", ({roomId, recivers, result}) => {
+            recivers.forEach(user => {
+                let reciver = findUser(user._id)
+                io.to(reciver[0].skid).emit("getUnMuteUser", { roomId, user, result})
+            })
+        });
+
         // Event pending chat 
         socket.on("send-PendingChat", ({roomId, recivers, sender }) => {
             // Sent to friend Id

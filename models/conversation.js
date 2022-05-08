@@ -22,7 +22,12 @@ const conversationSchema = new Schema({
     type: String,
     inviteCode: String,
     rule: String,
-    des: String
+    des: String,
+    membersBanned: [{
+        _id: String,
+        reason: String,
+        time: Date
+    }]
 },{
     versionKey: false,
     timestamps: true

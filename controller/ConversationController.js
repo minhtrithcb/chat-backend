@@ -246,6 +246,48 @@ const ConversationController = {
             return res.json({ success: false, msg: error})
         }
    },
+    // Post user ban in group
+    async bannedUser (req,res) {
+        try {
+            const result = await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            },{
+                $addToSet: {
+                    membersBanned: {
+                        _id: req.body.memberId,
+                        reason: req.body.reason,
+                        time: req.body.time
+                    },
+                }
+            }, {new: true}) 
+            .populate('members')
+            .populate('membersLeave')
+
+            return res.json({success: true, msg: "User banned", result})
+        } catch (error) {
+            return res.json({ success: false, msg: error})
+        }
+   },
+   // Post user unban in group
+    async unBannedUser (req,res) {
+        try {
+            const result = await Conversation.findOneAndUpdate({
+                _id: req.body.roomId
+            },{
+                $pull: {
+                    membersBanned: {
+                        _id: req.body.memberId
+                    },
+                }
+            }, {new: true}) 
+            .populate('members')
+            .populate('membersLeave')
+
+            return res.json({success: true, msg: "User unbanned", result})
+        } catch (error) {
+            return res.json({ success: false, msg: error})
+        }
+   },
    
 
 }
