@@ -12,7 +12,7 @@ const http = socketIo(app)
 app.use(express.json());
 
 app.use(cors({
-    origin: ["https://lighthearted-mandazi-b4952c.netlify.app/", "https://62790523c47dae0008029cde--lighthearted-mandazi-b4952c.netlify.app/"],
+    origin: "*",
     methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
