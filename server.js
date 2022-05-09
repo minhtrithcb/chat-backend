@@ -24,6 +24,6 @@ connectDB();
 // ROUTER INIT
 routerInit(app);
 
-http.listen(PORT, () => {
+http.listen(PORT || 8000, () => {
     console.log(`Server chạy ở cổng ${PORT}`)
 })
