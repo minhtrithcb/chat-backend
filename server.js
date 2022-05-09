@@ -12,7 +12,7 @@ const http = socketIo(app)
 app.use(express.json());
 
 app.use(cors({
-    origin: "*",
+    origin: ["*"],
     methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
