@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
         jwt.verify(accessTK, A_TOKEN_SECRET, (err, data) => {
             if (err) {
                 res.clearCookie('accessToken');
-                return res.status(401).json({isLogin: false})
+                return res.status(401).json({isLogin: false, err})
             } else next()
         })
     } else {

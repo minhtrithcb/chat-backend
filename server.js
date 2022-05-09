@@ -16,6 +16,7 @@ app.use(cors({
     methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
+
 app.use(cookieParser());
 
 // CONNECT MONGODB

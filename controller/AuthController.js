@@ -127,7 +127,8 @@ const AuthController = {
         
         // Create cookies accessToken
         res.cookie('accessToken', accessToken, {
-            httpOnly: true
+            httpOnly: true,
+            secure: true
         });
 
         // Create cookie refreshToken expiresIn One day
