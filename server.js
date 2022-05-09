@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const {PORT} = require("./config/env.config.js")
 const app = express()
 const routerInit = require("./routers")
@@ -8,7 +8,7 @@ const connectDB = require('./DB/connectDB.js')
 const cookieParser = require('cookie-parser')
 const socketIo = require('./socket')
 const http = socketIo(app)
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 app.use(express.json());
 
 app.use(cors({
