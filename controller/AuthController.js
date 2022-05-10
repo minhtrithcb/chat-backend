@@ -60,8 +60,8 @@ const AuthController = {
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
-                        // secure: true,
-                        // sameSite: 'none' ,
+                        secure: true,
+                        sameSite: 'strict' ,
                         domain: ".lighthearted-mandazi-b4952c.netlify.app",
                     });
                     return res.json({isLogin: true , accessToken})
@@ -88,8 +88,8 @@ const AuthController = {
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
-                        // secure: true,
-                        // sameSite: 'none',
+                        secure: true,
+                        sameSite: 'strict',
                         domain: ".lighthearted-mandazi-b4952c.netlify.app"
                     });
                     return res.json({isLogin: true , accessToken})
@@ -134,8 +134,8 @@ const AuthController = {
         // Create cookies accessToken
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            // secure: true,
-            // sameSite: 'none' ,
+            secure: true,
+            sameSite: 'strict' ,
             domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
 
@@ -143,8 +143,8 @@ const AuthController = {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
-            // secure: true,
-            // sameSite: 'none' ,
+            secure: true,
+            sameSite: 'strict' ,
             domain: ".lighthearted-mandazi-b4952c.netlify.app"
 
 
