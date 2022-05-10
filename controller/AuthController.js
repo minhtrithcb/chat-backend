@@ -104,8 +104,8 @@ const AuthController = {
     async logout (req,res) {
         if (req.cookies.accessToken && req.cookies.refreshToken) {
             // delete cookie
-            res.clearCookie('accessToken',{path:'/'});
-            res.clearCookie('refreshToken',{path:'/'});
+            res.clearCookie('accessToken',{path:'/', domain : 'react-chat-101.herokuapp.com'});
+            res.clearCookie('refreshToken',{path:'/', domain : 'react-chat-101.herokuapp.com'});
 
             return res.json({isLogin: false , msg: "Đăng xuất thành công"})
         } else {
