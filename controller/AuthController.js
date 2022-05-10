@@ -61,7 +61,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'strict' ,
+                        sameSite: 'none' ,
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app",
                     });
                     return res.json({isLogin: true , accessToken})
@@ -89,7 +89,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'strict',
+                        sameSite: 'none',
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app"
                     });
                     return res.json({isLogin: true , accessToken})
@@ -107,14 +107,14 @@ const AuthController = {
             res.cookie('accessToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'strict' ,
+                sameSite: 'none' ,
                 maxAge: Date.now()
             });
 
             res.cookie('refreshToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'strict' ,
+                sameSite: 'none' ,
                 maxAge: Date.now()
             });
 
@@ -146,7 +146,7 @@ const AuthController = {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'strict' ,
+            sameSite: 'none' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
 
@@ -155,7 +155,7 @@ const AuthController = {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
             secure: true,
-            sameSite: 'strict' ,
+            sameSite: 'none' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
         // Sent back to user
