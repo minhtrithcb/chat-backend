@@ -60,8 +60,9 @@ const AuthController = {
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
-                        secure: true,
-                        SameSite: 'none' 
+                        domain: 'https://lighthearted-mandazi-b4952c.netlify.app'
+                        // secure: true,
+                        // SameSite: 'none' 
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -87,8 +88,10 @@ const AuthController = {
                     const accessToken = jwt.sign({ username: data.username, id : data.id}, A_TOKEN_SECRET, { expiresIn: '1h' })
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
-                        secure: true,
-                        SameSite: 'none' 
+                        domain: 'https://lighthearted-mandazi-b4952c.netlify.app'
+                        
+                        // secure: true,
+                        // SameSite: 'none' 
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -132,16 +135,20 @@ const AuthController = {
         // Create cookies accessToken
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: true,
-            SameSite: 'none' 
+            domain: 'https://lighthearted-mandazi-b4952c.netlify.app'
+
+            // secure: true,
+            // SameSite: 'none' 
         });
 
         // Create cookie refreshToken expiresIn One day
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
-            secure: true,
-            SameSite: 'none' 
+            domain: 'https://lighthearted-mandazi-b4952c.netlify.app'
+
+            // secure: true,
+            // SameSite: 'none' 
         });
         // Sent back to user
         return res.json({success: true, isLogin: true , accessToken, msg: "Đăng nhập thành công"})

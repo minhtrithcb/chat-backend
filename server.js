@@ -12,10 +12,12 @@ const http = socketIo(app)
 app.use(express.json());
 
 app.use(cors({
-    origin: ["*"],
+    origin: ["https://lighthearted-mandazi-b4952c.netlify.app"],
     methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
+
+app.set('trust proxy', 1);
 
 app.use(cookieParser());
 
