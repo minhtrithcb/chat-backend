@@ -104,8 +104,8 @@ const AuthController = {
     async logout (req,res) {
         if (req.cookies.accessToken && req.cookies.refreshToken) {
             // delete cookie
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
+            res.clearCookie('accessToken',{path:'/'});
+            res.clearCookie('refreshToken',{path:'/'});
 
             return res.json({isLogin: false , msg: "Đăng xuất thành công"})
         } else {
@@ -146,8 +146,6 @@ const AuthController = {
             secure: true,
             sameSite: 'none' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
-
-
         });
         // Sent back to user
         return res.json({success: true, isLogin: true , accessToken, msg: "Đăng nhập thành công"})
