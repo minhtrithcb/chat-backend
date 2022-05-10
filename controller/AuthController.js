@@ -62,7 +62,7 @@ const AuthController = {
                         httpOnly: true,
                         secure: true,
                         sameSite: 'none' ,
-                        domain: ".lighthearted-mandazi-b4952c.netlify.app",
+                        // domain: ".lighthearted-mandazi-b4952c.netlify.app",
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -90,7 +90,7 @@ const AuthController = {
                         httpOnly: true,
                         secure: true,
                         sameSite: 'none',
-                        domain: ".lighthearted-mandazi-b4952c.netlify.app"
+                        // domain: ".lighthearted-mandazi-b4952c.netlify.app"
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -136,7 +136,7 @@ const AuthController = {
             httpOnly: true,
             secure: true,
             sameSite: 'none' ,
-            domain: ".lighthearted-mandazi-b4952c.netlify.app"
+            // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
 
         // Create cookie refreshToken expiresIn One day
@@ -145,7 +145,7 @@ const AuthController = {
             maxAge: 24 * 60 * 60 * 1000 ,
             secure: true,
             sameSite: 'none' ,
-            domain: ".lighthearted-mandazi-b4952c.netlify.app"
+            // domain: ".lighthearted-mandazi-b4952c.netlify.app"
 
 
         });
