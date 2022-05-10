@@ -104,17 +104,32 @@ const AuthController = {
     async logout (req,res) {
         if (req.cookies.accessToken && req.cookies.refreshToken) {
             // delete cookie
-            res.clearCookie('accessToken',{
-                path:'/', 
-                domain : 'react-chat-101.herokuapp.com',
-                sameSite: 'none',
-                secure: true
+            // res.clearCookie('accessToken',{
+            //     path:'/', 
+            //     domain : 'react-chat-101.herokuapp.com',
+            //     sameSite: 'none',
+            //     secure: true
+            // });
+            // res.clearCookie('refreshToken',{
+            //     path:'/', 
+            //     domain : 'react-chat-101.herokuapp.com',
+            //     sameSite: 'none',
+            //     secure: true
+            // });
+            // Create cookies accessToken
+            res.cookie('accessToken', '', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none' ,
+                maxAge: Date.now()
             });
-            res.clearCookie('refreshToken',{
-                path:'/', 
-                domain : 'react-chat-101.herokuapp.com',
-                sameSite: 'none',
-                secure: true
+
+            // Create cookie refreshToken expiresIn One day
+            res.cookie('refreshToken', '', {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none' ,
+                maxAge: Date.now()
             });
 
             return res.json({isLogin: false , msg: "Đăng xuất thành công"})
