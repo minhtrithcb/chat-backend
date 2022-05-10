@@ -7,7 +7,7 @@ const socketIo = (app) => {
     const httpServer = createServer(app);
     const io = new Server(httpServer,  {
         cors: {
-            origin: "http://localhost:3000",
+            origin: "https://lighthearted-mandazi-b4952c.netlify.app",
             credentials: true
         }
     });
