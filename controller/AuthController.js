@@ -61,7 +61,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none' ,
+                        sameSite: 'strict' ,
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app",
                     });
                     return res.json({isLogin: true , accessToken})
@@ -89,7 +89,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none',
+                        sameSite: 'strict',
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app"
                     });
                     return res.json({isLogin: true , accessToken})
@@ -103,32 +103,18 @@ const AuthController = {
     // Post logout just delete two cookie refreshToken & accessToken
     async logout (req,res) {
         if (req.cookies.accessToken && req.cookies.refreshToken) {
-            // delete cookie
-            // res.clearCookie('accessToken',{
-            //     path:'/', 
-            //     domain : 'react-chat-101.herokuapp.com',
-            //     sameSite: 'none',
-            //     secure: true
-            // });
-            // res.clearCookie('refreshToken',{
-            //     path:'/', 
-            //     domain : 'react-chat-101.herokuapp.com',
-            //     sameSite: 'none',
-            //     secure: true
-            // });
-            // Create cookies accessToken
+            // delete cookie by set this to empty and expire now
             res.cookie('accessToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none' ,
+                sameSite: 'strict' ,
                 maxAge: Date.now()
             });
 
-            // Create cookie refreshToken expiresIn One day
             res.cookie('refreshToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none' ,
+                sameSite: 'strict' ,
                 maxAge: Date.now()
             });
 
@@ -160,7 +146,7 @@ const AuthController = {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'none' ,
+            sameSite: 'strict' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
 
@@ -169,7 +155,7 @@ const AuthController = {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
             secure: true,
-            sameSite: 'none' ,
+            sameSite: 'strict' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
         // Sent back to user
