@@ -61,7 +61,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        SameSite: 'none' 
+                        sameSite: 'none' 
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -88,7 +88,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        SameSite: 'none' 
+                        sameSite: 'none' 
                     });
                     return res.json({isLogin: true , accessToken})
                 }
@@ -133,7 +133,7 @@ const AuthController = {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            SameSite: 'none' 
+            sameSite: 'none' 
 
         });
 
@@ -142,7 +142,7 @@ const AuthController = {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
             secure: true,
-            SameSite: 'none' 
+            sameSite: 'none' 
 
         });
         // Sent back to user
