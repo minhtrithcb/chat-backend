@@ -10,7 +10,8 @@ const socketIo = (app) => {
             origin: [
                 "https://lighthearted-mandazi-b4952c.netlify.app",
                 "http://localhost:3000",
-                "http://minhtri-chat.ga"
+                "http://minhtri-chat.ga",
+                "https://minhtri-chat.ga"
             ],
             credentials: true
         }
