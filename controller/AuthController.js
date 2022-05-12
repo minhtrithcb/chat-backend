@@ -41,7 +41,12 @@ const AuthController = {
             // Check Token if(expire or strangeCode) ? delete accestTK : sent back nothing 
             jwt.verify(accessTK, A_TOKEN_SECRET, (err, data) => {
                 if (err) {
-                    res.clearCookie('accessToken');
+                    res.cookie('accessToken', '', {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: 'none' ,
+                        maxAge: Date.now()
+                    });
                     return res.status(401).json({isLogin: false})
                 } else {
                     return res.json({isLogin: true , accessToken: accessTK})
@@ -53,7 +58,12 @@ const AuthController = {
             // Check Token if(expire or strangeCode) ? delete refreshTk send Login fail: create new accestTk
             jwt.verify(refreshTk, R_TOKEN_SECRET, (err, data) => {
                 if (err) {
-                    res.clearCookie('refreshToken');
+                    rres.cookie('refreshToken', '', {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: 'none' ,
+                        maxAge: Date.now()
+                    });
                     return res.status(403).json({isLogin: false })
                 } else {        
                     // Create new accestTk & send back
@@ -81,7 +91,12 @@ const AuthController = {
             // Check Token if(expire or strangeCode) ? delete refreshTk send Login fail: create new accestTk
             jwt.verify(refreshTk, R_TOKEN_SECRET, (err, data) => {
                 if (err) {
-                    res.clearCookie('refreshToken');
+                    res.cookie('refreshToken', '', {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: 'none' ,
+                        maxAge: Date.now()
+                    });
                     return res.status(403).json({isLogin: false })
                 } else {        
                     // Create new accestTk & send back
