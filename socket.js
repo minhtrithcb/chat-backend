@@ -89,7 +89,9 @@ const socketIo = (app) => {
         socket.on("send-muteUser", ({roomId, recivers}) => {
             recivers.forEach(user => {
                 let reciver = findUser(user._id)
-                io.to(reciver[0].skid).emit("getMuteUser",{ roomId, user})
+                if (reciver[0]) {    
+                    io.to(reciver[0].skid).emit("getMuteUser",{ roomId, user})
+                }
             })
         });
 
@@ -97,7 +99,9 @@ const socketIo = (app) => {
         socket.on("send-unMute", ({roomId, recivers, result}) => {
             recivers.forEach(user => {
                 let reciver = findUser(user._id)
-                io.to(reciver[0].skid).emit("getUnMuteUser", { roomId, user, result})
+                if (reciver[0]) {
+                    io.to(reciver[0].skid).emit("getUnMuteUser", { roomId, user, result})
+                }
             })
         });
 
