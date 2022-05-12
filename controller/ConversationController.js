@@ -252,12 +252,7 @@ const ConversationController = {
             const result = await Conversation.findOneAndUpdate({
                 _id: req.body.roomId
             },{
-                $pull: {
-                    membersBanned: {
-                        _id: req.body.memberId
-                    },
-                },
-                $push: {
+                $addToSet: {
                     membersBanned: {
                         _id: req.body.memberId,
                         reason: req.body.reason,
