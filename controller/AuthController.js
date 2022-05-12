@@ -111,7 +111,7 @@ const AuthController = {
                 }
             })
         } else {
-            return res.json({isLogin: false , msg: "dont try that :(("})
+            return res.json({isLogin: false , reload: true, msg: "dont try that :(("})
         }
     },
 
