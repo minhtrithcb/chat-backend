@@ -44,7 +44,7 @@ const AuthController = {
                     res.cookie('accessToken', '', {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none' ,
+                        sameSite: 'lax' ,
                         maxAge: Date.now()
                     });
                     return res.status(401).json({isLogin: false})
@@ -61,7 +61,7 @@ const AuthController = {
                     rres.cookie('refreshToken', '', {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none' ,
+                        sameSite: 'lax' ,
                         maxAge: Date.now()
                     });
                     return res.status(403).json({isLogin: false })
@@ -71,7 +71,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none' ,
+                        sameSite: 'lax' ,
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app",
                     });
                     return res.json({isLogin: true , accessToken})
@@ -94,7 +94,7 @@ const AuthController = {
                     res.cookie('refreshToken', '', {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none' ,
+                        sameSite: 'lax' ,
                         maxAge: Date.now()
                     });
                     return res.status(403).json({isLogin: false })
@@ -104,7 +104,7 @@ const AuthController = {
                     res.cookie('accessToken', accessToken, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'none',
+                        sameSite: 'lax',
                         // domain: ".lighthearted-mandazi-b4952c.netlify.app"
                     });
                     return res.json({isLogin: true , accessToken})
@@ -122,14 +122,14 @@ const AuthController = {
             res.cookie('accessToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none' ,
+                sameSite: 'lax' ,
                 maxAge: Date.now()
             });
 
             res.cookie('refreshToken', '', {
                 httpOnly: true,
                 secure: true,
-                sameSite: 'none' ,
+                sameSite: 'lax' ,
                 maxAge: Date.now()
             });
 
@@ -161,7 +161,7 @@ const AuthController = {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'none' ,
+            sameSite: 'lax' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
 
@@ -170,7 +170,7 @@ const AuthController = {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000 ,
             secure: true,
-            sameSite: 'none' ,
+            sameSite: 'lax' ,
             // domain: ".lighthearted-mandazi-b4952c.netlify.app"
         });
         // Sent back to user
