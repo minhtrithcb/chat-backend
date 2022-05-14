@@ -13,13 +13,9 @@ app.use(express.json());
 
 app.use(cors({
     origin: [
-        "https://lighthearted-mandazi-b4952c.netlify.app",
-        "http://minhtri-chat.ga", 
-        "http://localhost:3000",
         "https://minhtri-chat.ga"
-
     ],
-    methods: ["GET", "POST", "PATCH"],
+    methods: ["GET", "POST"],
     credentials: true
 }));
 

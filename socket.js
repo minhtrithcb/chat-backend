@@ -8,9 +8,6 @@ const socketIo = (app) => {
     const io = new Server(httpServer,  {
         cors: {
             origin: [
-                "https://lighthearted-mandazi-b4952c.netlify.app",
-                "http://localhost:3000",
-                "http://minhtri-chat.ga",
                 "https://minhtri-chat.ga"
             ],
             credentials: true

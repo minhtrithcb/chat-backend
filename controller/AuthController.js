@@ -254,7 +254,7 @@ const AuthController = {
                     <br> Lưu ý mã chỉ có hiệu lực 10 phút
                 </p>`, 
             };
-            transporter.sendMail(mailInfo)
+            await transporter.sendMail(mailInfo)
             return res.json({success : true, msg: 'Gửi thành công hãy kiểm tra mail của bạn'})
         } catch (error) {
             console.log(error);
