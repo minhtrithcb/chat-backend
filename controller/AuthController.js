@@ -229,7 +229,7 @@ const AuthController = {
                 otp: hashOtp,
                 expireAt: Date.now() + 3600000
             })
-            transporter.sendMail(mailInfo)
+            await transporter.sendMail(mailInfo)
             return res.json({success : true, msg: 'Gửi mail thành công'})
             
         } catch (error) {
