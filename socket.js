@@ -9,7 +9,7 @@ const socketIo = (app) => {
         cors: {
             origin: [
                 "https://minhtri-chat.ga",
-                "http://localhost:3000"
+                // "http://localhost:3000"
             ],
             credentials: true
         }

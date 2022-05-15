@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors({
     origin: [
         "https://minhtri-chat.ga",
-        "http://localhost:3000"
+        // "http://localhost:3000"
     ],
     methods: ["GET", "POST"],
     credentials: true
