@@ -246,6 +246,19 @@ const AuthController = {
             const token = jwt.sign({_id: user._id}, RESET_PASSWORD, {
                 expiresIn : "10m"
             })
+            await new Promise((resolve, reject) => {
+                // verify connection configuration
+                transporter.verify(function (error, success) {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    } else {
+                        console.log("Server is ready to take our messages");
+                        resolve(success);
+                    }
+                });
+            });
+            
             const mailInfo = {
                 from: `ADMIN <${GMAIL_EMAIL}>`, 
                 to: req.body.email, 
@@ -254,7 +267,19 @@ const AuthController = {
                     <br> Lưu ý mã chỉ có hiệu lực 10 phút
                 </p>`, 
             };
-            await transporter.sendMail(mailInfo)
+            await new Promise((resolve, reject) => {
+                // send mail
+                transporter.sendMail(mailInfo, (err, info) => {
+                    if (err) {
+                        console.error(err);
+                        reject(err);
+                    } else {
+                        console.log(info);
+                        resolve(info);
+                    }
+                });
+            });
+            // await transporter.sendMail(mailInfo)
             return res.json({success : true, msg: 'Gửi thành công hãy kiểm tra mail của bạn'})
         } catch (error) {
             console.log(error);

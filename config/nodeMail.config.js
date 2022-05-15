@@ -8,6 +8,7 @@ const transporter = nodemailer.createTransport({
         user: GMAIL_EMAIL, 
         pass: GMAIL_PASSWORD, 
     },
+    secure: true,
 })
 
 module.exports = transporter
