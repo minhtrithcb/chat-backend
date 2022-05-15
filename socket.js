@@ -8,7 +8,8 @@ const socketIo = (app) => {
     const io = new Server(httpServer,  {
         cors: {
             origin: [
-                "https://minhtri-chat.ga"
+                "https://minhtri-chat.ga",
+                "http://localhost:3000"
             ],
             credentials: true
         }
