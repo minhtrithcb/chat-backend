@@ -31,4 +31,7 @@ router.post("/check-token-reset-pass", AuthController.checkValidResetPass)
 // Route post reset password
 router.post("/reset-password", AuthController.resetPassword)
 
+// Route post reset with old password
+router.post("/reset-oldPassword", AuthController.resetWithOldPassword)
+
 module.exports = router

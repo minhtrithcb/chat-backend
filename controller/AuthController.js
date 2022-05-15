@@ -246,19 +246,6 @@ const AuthController = {
             const token = jwt.sign({_id: user._id}, RESET_PASSWORD, {
                 expiresIn : "10m"
             })
-            await new Promise((resolve, reject) => {
-                // verify connection configuration
-                transporter.verify(function (error, success) {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    } else {
-                        console.log("Server is ready to take our messages");
-                        resolve(success);
-                    }
-                });
-            });
-            
             const mailInfo = {
                 from: `ADMIN <${GMAIL_EMAIL}>`, 
                 to: req.body.email, 
@@ -267,19 +254,7 @@ const AuthController = {
                     <br> Lưu ý mã chỉ có hiệu lực 10 phút
                 </p>`, 
             };
-            await new Promise((resolve, reject) => {
-                // send mail
-                transporter.sendMail(mailInfo, (err, info) => {
-                    if (err) {
-                        console.error(err);
-                        reject(err);
-                    } else {
-                        console.log(info);
-                        resolve(info);
-                    }
-                });
-            });
-            // await transporter.sendMail(mailInfo)
+            await transporter.sendMail(mailInfo)
             return res.json({success : true, msg: 'Gửi thành công hãy kiểm tra mail của bạn'})
         } catch (error) {
             console.log(error);
@@ -306,6 +281,28 @@ const AuthController = {
     // Post reset password
     async resetPassword (req, res) {
         try {
+            const hashPass = await bcrypt.hash(`${req.body.password}`, 10)
+            // const token = req.body.token 
+            const userUpdate = await User.findByIdAndUpdate(req.body.userId, {
+                password: hashPass
+            }, {new: true}) 
+
+            if (!userUpdate) return res.json({success : false, msg: "Đã có lỗi xảy ra"})
+            return res.json({success : true, msg: "Đã cập nhật mật khẩu"})
+        } catch (error) {
+            console.log(error);
+            return res.json({success : false, msg: "Đã có lỗi xảy ra"})
+        }
+    },
+
+    // Post reset with old password
+    async resetWithOldPassword (req, res) {
+        try {
+            const user = await User.findById(req.body.userId) 
+            // Check old password
+            const passValid = await bcrypt.compare(req.body.oldPassword , user.password)
+            if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
+            
             const hashPass = await bcrypt.hash(`${req.body.password}`, 10)
             // const token = req.body.token 
             const userUpdate = await User.findByIdAndUpdate(req.body.userId, {
