@@ -298,7 +298,7 @@ const AuthController = {
     // Post reset with old password
     async resetWithOldPassword (req, res) {
         try {
-            const user = await User.findById(req.body.userId) 
+            const user = await User.findOne({_id: req.body.userId}) 
             // Check old password
             const passValid = await bcrypt.compare(req.body.oldPassword , user.password)
             if (!passValid) return res.send({success: false, msg: "Sai mật khẩu"})
