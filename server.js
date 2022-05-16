@@ -16,7 +16,7 @@ app.use(cors({
         "https://minhtri-chat.ga",
         // "http://localhost:3000"
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PATCH"],
     credentials: true
 }));
 
