@@ -1,35 +1,38 @@
 const express = require('express')
 const cors = require('cors')
-// const morgan = require('morgan')
-const {PORT} = require("./config/env.config.js")
+const morgan = require('morgan')
+const { PORT } = require('./config/env.config.js')
 const app = express()
-const routerInit = require("./routers")
+const routerInit = require('./routers')
 const connectDB = require('./DB/connectDB.js')
 const cookieParser = require('cookie-parser')
 const socketIo = require('./socket')
 const http = socketIo(app)
-// app.use(morgan('dev'))
-app.use(express.json());
+app.use(morgan('dev'))
+app.use(express.json())
 
-app.use(cors({
-    origin: [
-        "https://minhtri-chat.ga",
-        // "http://localhost:3000"
-    ],
-    methods: ["GET", "POST", "PATCH"],
-    credentials: true
-}));
+const envDev = process.env.NODE_ENV.trim() === 'development'
+const productionServer = ['https://minhtrichat.tk']
+const testServer = ['http://localhost:3000']
 
-app.set('trust proxy', 1);
+app.use(
+	cors({
+		origin: envDev ? testServer : productionServer,
+		methods: ['GET', 'POST', 'PATCH'],
+		credentials: true,
+	})
+)
 
-app.use(cookieParser());
+app.set('trust proxy', 1)
+
+app.use(cookieParser())
 
 // CONNECT MONGODB
-connectDB();
+connectDB()
 
 // ROUTER INIT
-routerInit(app);
+routerInit(app)
 
-http.listen(PORT || 8000, () => {
-    console.log(`Server chạy ở cổng  ${PORT}`)
+http.listen(PORT, () => {
+	console.log(`Server chạy ở cổng  ${PORT}`)
 })
