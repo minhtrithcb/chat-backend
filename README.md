@@ -1,5 +1,5 @@
 ## React Chat - Ứng dụng nhắn tin trực tuyến - BackEnd
-<img src="https://minhtri-chat.ga/chat512.png" height="100" alt="React Chat logo">
+<img src="https://minhtrichat.tk/chat512.png" height="100" alt="React Chat logo">
 
 Đây là phần backend của ứng dụng [React chat](https://minhtri-chat.ga). Phần backend được viết bằng nodejs, express, socket.io, jwt mongodb.
 
